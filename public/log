@@ -1,0 +1,4 @@
+[15-Jun-2015 13:03:39 America/Sao_Paulo] PHP Fatal error:  Class 'Code\Sistema\Application' not found in C:\php\www\Suporte\bootstrap.php on line 55
+[15-Jun-2015 13:03:39 America/Sao_Paulo] PHP Stack trace:
+[15-Jun-2015 13:03:39 America/Sao_Paulo] PHP   1. {main}() C:\php\www\Suporte\public\index.php:0
+[15-Jun-2015 13:03:39 America/Sao_Paulo] PHP   2. require_once() C:\php\www\Suporte\public\index.php:3
