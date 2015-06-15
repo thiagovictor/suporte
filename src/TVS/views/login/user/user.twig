@@ -1,0 +1,57 @@
+{% extends "template.twig" %}
+
+{% block conteudo %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>NOME</th>
+                <th>EMAIL</th>
+                <th>ATIVO</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.ativo }}</td>
+                    <td>
+                        <a href="{{path('user_edit',{'id':user.id})}}" class="btn btn-default" aria-label="Left Align">
+                            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                        </a>
+                        <a href="{{path('user_delete',{'id':user.id})}}" class="btn btn-default" aria-label="Left Align">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        </a>
+
+                    </td>
+                </tr>   
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <nav>
+                <ul class="pagination">
+                    {%for i in 1..numero_paginas%}
+                        {%if loop.first %}
+                            <li class="prev {%if page_atual==1%} disabled{%endif%}"><a {%if page_atual > 1%} href="{{path('user_listar_pagination',{'page':page_atual-1})}}" {%endif%}><<</a></li>
+                        {%endif%}
+                            {%if numero_paginas > 0 %}
+                            <li {%if page_atual==loop.index%} class="active"{%endif%}><a href="{{path('user_listar_pagination',{'page':loop.index})}}">{{loop.index}}</a></li> 
+                            {% endif%}
+                        {%if loop.last %}
+                            <li class="next{%if page_atual==numero_paginas%} disabled {%endif%}"><a {%if page_atual < numero_paginas%} href="{{path('user_listar_pagination',{'page':page_atual+1})}}" {%endif%}>>></a></li>
+                        {%endif%}
+                    {%endfor%}
+                </ul>
+            </nav>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+
+
+{% endblock %}

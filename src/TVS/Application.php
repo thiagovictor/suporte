@@ -11,12 +11,18 @@ class Application extends ApplicationSilex {
         parent::__construct($values);
         $app = $this;
 
+        $app['logado'] = false;
+
+        $app['LoginService'] = function () use($app) {
+            $loginService = new Login\Service\LoginService($app['EntityManager'], new Login\Entity\User);
+            return $loginService;
+        };
+
         $app->get('/', function () use ($app) {
-            return $app['twig']->render('template.twig', []);
+            return $app['twig']->render('login/login.twig', []);
         })->bind('inicio');
 
         $app->mount("/login", new LoginController());
-      
     }
 
 }

@@ -38,7 +38,7 @@ class User
     /**
      * @var string
      *
-     * @ORM\Column(name="password", type="string", length=32, nullable=false)
+     * @ORM\Column(name="password", type="string", length=255, nullable=false)
      */
     protected $password;
 
@@ -112,7 +112,7 @@ class User
         return $hashSenha;
     }
 
-    public function setAtivo(boolean $ativo) {
+    public function setAtivo($ativo) {
         $this->ativo = $ativo;
         return $this;
     }

@@ -35,5 +35,20 @@ class UserRepository extends EntityRepository {
         return false;
     }
     
+    public function findPagination($firstResult,$maxResults) {
+        return $this->createQueryBuilder('c')
+                ->setFirstResult($firstResult)
+                ->setMaxResults($maxResults)
+                ->getQuery()
+                ->getResult();
+    }
+    
+    public function getRows() {
+        return $this->createQueryBuilder('c')
+                ->select('Count(c)')
+                ->getQuery()
+                ->getSingleScalarResult();
+    }
+    
 
 }
