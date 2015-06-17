@@ -3,12 +3,12 @@
 {% block conteudo %}
     <div class="col-md-4"></div>
     <div class="col-md-4">
-        <form class="form-signin">
+        <form class="form-signin" method="POST" action="{{ path('user_autenticar') }}" >
             <h2 class="form-signin-heading">Acesso restrito</h2>
             <label for="user" class="sr-only">Usu&aacute;rio</label>
-            <input type="text" id="user" class="form-control" placeholder="Usu&aacute;rio" required autofocus>
+            <input type="text" name="user" id="user" class="form-control" placeholder="Usu&aacute;rio" required autofocus >
             <label for="password" class="sr-only">Senha</label>
-            <input type="password" id="password" class="form-control" placeholder="Senha" required>
+            <input type="password" name="password" id="password" class="form-control" placeholder="Senha" required>
             <div class="checkbox">
                 
             </div>

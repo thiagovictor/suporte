@@ -4,7 +4,7 @@ namespace TVS\Login\Service;
 
 use Doctrine\ORM\EntityManager;
 use TVS\Login\Entity\User;
-use TVS\Login\Service\AbstractService;
+use TVS\Base\Service\AbstractService;
 
 class LoginService extends AbstractService {
 

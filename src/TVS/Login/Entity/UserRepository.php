@@ -27,6 +27,20 @@ class UserRepository extends EntityRepository {
         }
     }
     
+    public function findByUsernameAndPassword($username, $password) {
+        $user = $this->findOneByUsername($username);
+
+        if ($user) {
+            if ($user->getPassword() == $user->encryptedPassword($password)) {
+                return $user;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+    
     public function findById($id) {
         $user = $this->findOneById($id);
         if ($user) {

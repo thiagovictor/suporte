@@ -1,6 +1,6 @@
 <?php
 
-namespace TVS\Login\Service;
+namespace TVS\Base\Service;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;

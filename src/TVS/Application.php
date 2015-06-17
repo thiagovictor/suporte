@@ -4,7 +4,6 @@ namespace TVS;
 
 use Silex\Application as ApplicationSilex;
 use TVS\Login\Controller\LoginController;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpFoundation\Request;
 
 class Application extends ApplicationSilex {
@@ -21,12 +20,12 @@ class Application extends ApplicationSilex {
             return $loginService;
         };
 
-        $app->before(function(Request $request) use ($app) {
+        /*$app->before(function(Request $request) use ($app) {
             if (!$app['request']->get('non_require_authentication')) {
                 //echo $requestget->RequestUri();
                 return $app->redirect('/');
             }
-        });
+        });*/
 
         $app->get('/', function () use ($app) {
                     return $app['twig']->render('login/login.twig', []);

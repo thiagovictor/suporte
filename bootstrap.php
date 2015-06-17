@@ -47,7 +47,7 @@ $em = EntityManager::create(
             'host' => '127.0.0.1',
             'port' => '3306',
             'user' => 'root',
-            'password' => 'th10g0@',
+            'password' => '',
             'dbname' => 'suporte',
                 ), $config, $evm
 );
