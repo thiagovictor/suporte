@@ -25,5 +25,10 @@ class LoginService extends AbstractService {
         $data["ativo"] = 0;
         return $data;
     }
+    
+    public function findByUsernameAndPassword($username, $password) {
+        $repo = $this->em->getRepository($this->entity);
+        return $repo->findByUsernameAndPassword($username, $password);
+    }
 
 }

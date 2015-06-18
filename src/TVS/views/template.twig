@@ -13,6 +13,7 @@
     </head>
 
     <body role="document">
+        {% block menu %}
         <nav class="navbar navbar-inverse navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
@@ -20,11 +21,19 @@
                 </div>
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                      
+                        <li class="dropdown">
+                            <a href="{{ path('user_listar') }}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Usu&aacute;rios <span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="{{ path('user_new') }}">Novo</a></li>
+                                <li><a href="{{ path('user_listar') }}">Listar</a></li>
+                            </ul>
+                        </li>
+                        
                     </ul>
-                </div><!--/.nav-collapse -->
+                </div>
             </div>
         </nav>
+        {% endblock %}                   
         <div >
             <div class="col-md-2"></div>
             <div class="col-md-8">

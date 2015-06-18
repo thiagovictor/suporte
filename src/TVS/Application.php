@@ -19,18 +19,24 @@ class Application extends ApplicationSilex {
             $loginService = new Login\Service\LoginService($app['EntityManager'], new Login\Entity\User);
             return $loginService;
         };
-
-        /*$app->before(function(Request $request) use ($app) {
+        
+        $app->before(function(Request $request) use ($app) {
             if (!$app['request']->get('non_require_authentication')) {
-                //echo $requestget->RequestUri();
-                return $app->redirect('/');
+//                TESTAR SESSÃO
+//                if(!$app['authentication']){
+//                    return $app->redirect('/');
+//                }
             }
-        });*/
+        });
 
         $app->get('/', function () use ($app) {
                     return $app['twig']->render('login/login.twig', []);
-                })->bind('inicio')
+                })->bind('login')
                 ->value('non_require_authentication', true);
+                
+        $app->get('/index', function () use ($app) {
+                    return $app['twig']->render('template.twig', []);
+                })->bind('inicio');
 
         $app->mount("/login", new LoginController());
     }

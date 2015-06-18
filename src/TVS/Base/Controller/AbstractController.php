@@ -38,15 +38,15 @@ class AbstractController implements ControllerProviderInterface {
             return $app['twig']->render($this->views.'.twig', [$this->param_view  => $result, 'page_atual' => $page, 'numero_paginas' => ceil($app[$this->service]->getRows() / $this->registros_por_pagina)]);
         })->bind($this->bind.'_listar_pagination');
 
-        $this->controller->get('/novo', function () use ($app) {
-            return $app['twig']->render($this->views.'_novo.twig', ["Message" => array()]);
-        })->bind($this->bind.'_novo');
+        $this->controller->get('/new', function () use ($app) {
+            return $app['twig']->render($this->views.'_new.twig', ["Message" => array()]);
+        })->bind($this->bind.'_new');
 
-        $this->controller->post('/novo', function (Request $request) use ($app) {
+        $this->controller->post('/new', function (Request $request) use ($app) {
             $serviceManager = $app[$this->service];
             $result = $serviceManager->insert($request->request->all());
-            return $app['twig']->render($this->views.'_novo.twig', ["success" => $result, "Message" => $serviceManager->getMessage()]);
-        })->bind($this->bind.'_novo_post');
+            return $app['twig']->render($this->views.'_new.twig', ["success" => $result, "Message" => $serviceManager->getMessage()]);
+        })->bind($this->bind.'_new_post');
 
         $this->controller->get('/edit/{id}', function ($id) use ($app) {
             $result = $app[$this->service]->find($id);

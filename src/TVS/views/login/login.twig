@@ -1,16 +1,22 @@
 {% extends "template.twig" %}
-
+{% block menu %}{% endblock %}
 {% block conteudo %}
+
     <div class="col-md-4"></div>
     <div class="col-md-4">
+        {% if result is defined %}
+            <div class="alert alert-danger" role="alert">
+                <ul>{{ result|raw }}</ul>
+            </div>
+        {% endif%}
         <form class="form-signin" method="POST" action="{{ path('user_autenticar') }}" >
             <h2 class="form-signin-heading">Acesso restrito</h2>
             <label for="user" class="sr-only">Usu&aacute;rio</label>
-            <input type="text" name="user" id="user" class="form-control" placeholder="Usu&aacute;rio" required autofocus >
+            <input type="text" name="user" id="user" value="{% if user is defined %}{{user}}{% endif%}" class="form-control" placeholder="Usu&aacute;rio" {% if user is not defined %}required autofocus{% endif%} >
             <label for="password" class="sr-only">Senha</label>
             <input type="password" name="password" id="password" class="form-control" placeholder="Senha" required>
             <div class="checkbox">
-                
+
             </div>
             <button class="btn btn-lg btn-primary btn-block" type="submit">Entrar</button>
         </form>

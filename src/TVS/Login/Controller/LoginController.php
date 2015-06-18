@@ -4,6 +4,7 @@ namespace TVS\Login\Controller;
 
 use TVS\Base\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+
 class LoginController extends AbstractController {
 
     public function __construct() {
@@ -14,16 +15,18 @@ class LoginController extends AbstractController {
         $this->param_view = 'result';
         $this->redirect_delete = '/login';
     }
-    
+
     public function connect_extra() {
         $app = $this->app;
         $this->controller->post('/autenticar', function (Request $request) use ($app) {
-        echo $request->get('user')." | ".$request->get('password');
-        exit();
-        //$result = $app[$this->service]->findByUsernameAndPassword($request->get('user'), $request->get('password'));
-            
-            
-            //return $app['twig']->render($this->views.'.twig', [$this->param_view  => $result, 'page_atual' => 1, 'numero_paginas' => ceil($app[$this->service]->getRows() / $this->registros_por_pagina)]);
-        })->bind($this->bind.'_autenticar');
+            $user = $app[$this->service]->findByUsernameAndPassword($request->get('user'), $request->get('password'));
+            if($user){
+//              ADICIONAR USER EM SESSÃO
+                return $app->redirect('/index');
+            }
+            return $app['twig']->render('login/login.twig', [$this->param_view  => "Usu&aacute;rio e/ou Senha Incorretos", "user"=>$request->get('user')]);
+        })->bind($this->bind . '_autenticar')
+          ->value('non_require_authentication', true);
     }
+
 }
