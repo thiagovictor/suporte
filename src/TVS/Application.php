@@ -4,6 +4,7 @@ namespace TVS;
 
 use Silex\Application as ApplicationSilex;
 use TVS\Login\Controller\LoginController;
+use TVS\Login\Controller\RouteController;
 use Symfony\Component\HttpFoundation\Request;
 
 class Application extends ApplicationSilex {
@@ -15,6 +16,11 @@ class Application extends ApplicationSilex {
         $app['LoginService'] = function () use($app) {
             $loginService = new Login\Service\LoginService($app['EntityManager'], new Login\Entity\User);
             return $loginService;
+        };
+        
+        $app['RouteService'] = function () use($app) {
+            $routeService = new Login\Service\RouteService($app['EntityManager'], new Login\Entity\Route);
+            return $routeService;
         };
 
         $app->before(function(Request $request) use ($app) {
@@ -35,6 +41,7 @@ class Application extends ApplicationSilex {
         })->bind('inicio');
 
         $app->mount("/login", new LoginController());
+        $app->mount("/routes", new RouteController());
     }
 
 }
