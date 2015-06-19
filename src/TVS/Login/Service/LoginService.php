@@ -15,20 +15,25 @@ class LoginService extends AbstractService {
     }
 
     public function ajustaData(array $data = array()) {
-        if($data["password"] == 'xxxxxx'){
+        if ($data["password"] == 'xxxxxx') {
             unset($data["password"]);
         }
-        if(isset($data["ativo"])){
+        if (isset($data["ativo"])) {
             $data["ativo"] = 1;
             return $data;
         }
         $data["ativo"] = 0;
         return $data;
     }
-    
+
     public function findByUsernameAndPassword($username, $password) {
         $repo = $this->em->getRepository($this->entity);
         return $repo->findByUsernameAndPassword($username, $password);
+    }
+
+    public function fatchPairs() {
+        $repo = $this->em->getRepository($this->entity);
+        return $repo->fatchPairs();
     }
 
 }

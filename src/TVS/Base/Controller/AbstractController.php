@@ -19,6 +19,9 @@ class AbstractController implements ControllerProviderInterface {
 
     protected function connect_extra() {    
     }
+    protected function getParams() {
+        return [];
+    }
     public function connect(Application $app) {
         $this->controller = $app['controllers_factory'];
         $this->app = $app;
@@ -39,13 +42,13 @@ class AbstractController implements ControllerProviderInterface {
         })->bind($this->bind.'_listar_pagination');
 
         $this->controller->get('/new', function () use ($app) {
-            return $app['twig']->render($this->views.'_new.twig', ["Message" => array()]);
+            return $app['twig']->render($this->views.'_new.twig', ["Message" => array(), "params"=>$this->getParams()]);
         })->bind($this->bind.'_new');
 
         $this->controller->post('/new', function (Request $request) use ($app) {
             $serviceManager = $app[$this->service];
             $result = $serviceManager->insert($request->request->all());
-            return $app['twig']->render($this->views.'_new.twig', ["success" => $result, "Message" => $serviceManager->getMessage()]);
+            return $app['twig']->render($this->views.'_new.twig', ["success" => $result, "Message" => $serviceManager->getMessage(),"params"=>$this->getParams()]);
         })->bind($this->bind.'_new_post');
 
         $this->controller->get('/edit/{id}', function ($id) use ($app) {

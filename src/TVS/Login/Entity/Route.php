@@ -3,7 +3,6 @@
 namespace TVS\Login\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass="TVS\Login\Entity\RouteRepository")
@@ -17,34 +16,12 @@ class Route {
      * @ORM\GeneratedValue 
      */
     private $id;
-    
+
     /**
      * @ORM\Column(name="route", type="string", nullable=false) 
      */
     private $route;
-    
-        /**
-     * @ORM\ManyToMany(targetEntity="Privilege")
-     * @ORM\JoinTable(name="route_privileges",
-     * joinColumns={@ORM\JoinColumn(name="route_id", referencedColumnName="id", onDelete="CASCADE")},
-     * inverseJoinColumns={@ORM\JoinColumn(name="privilege_id", referencedColumnName="id", onDelete="CASCADE")}
-     * )
-     * */
-    private $privileges;
-    
-    public function __construct() {
-        $this->privileges = new ArrayCollection();
-    }
-    
-    function getPrivileges() {
-        return $this->privileges->toArray();
-    }
 
-    function setPrivileges($privileges) {
-        $this->privileges->add($privileges);
-        return $this;
-    }
-    
     function getId() {
         return $this->id;
     }
@@ -63,6 +40,4 @@ class Route {
         return $this;
     }
 
-
-    
 }

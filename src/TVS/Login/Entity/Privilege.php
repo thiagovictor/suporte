@@ -18,27 +18,28 @@ class Privilege {
     private $id;
     
     /**
-     * @ORM\Column(name="route", type="string", nullable=false) 
+     * @ORM\ManyToOne(targetEntity="Route")
+     * @ORM\JoinColumn(name="route_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    private $rota;
+    private $route;
 
     /**
-     * @ORM\Column(name="display", type="boolean", nullable=false) 
+     * @ORM\Column(name="display", type="boolean", nullable=true) 
      */
     private $display;
     
     /**
-     * @ORM\Column(name="new", type="boolean", nullable=false) 
+     * @ORM\Column(name="new", type="boolean", nullable=true) 
      */
     private $new;
     
     /**
-     * @ORM\Column(name="edit", type="boolean", nullable=false) 
+     * @ORM\Column(name="edit", type="boolean", nullable=true) 
      */
     private $edit;
     
     /**
-     * @ORM\Column(name="delete", type="boolean", nullable=false) 
+     * @ORM\Column(name="remove", type="boolean", nullable=true) 
      */
     private $delete;
     
@@ -48,12 +49,21 @@ class Privilege {
      */
     private $user;
     
-    function getRota() {
-        return $this->rota;
+    function getRoute() {
+        return $this->route;
     }
 
-    function setRota($rota) {
-        $this->rota = $rota;
+    function getUser() {
+        return $this->user;
+    }
+
+    function setRoute($route) {
+        $this->route = $route;
+        return $this;
+    }
+
+    function setUser($user) {
+        $this->user = $user;
         return $this;
     }
     
