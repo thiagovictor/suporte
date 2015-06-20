@@ -15,6 +15,9 @@ class PrivilegeService extends AbstractService {
     }
 
     public function ajustaData(array $data = array()) {
+        $privilegios = [
+            'display', 'new', 'edit', 'delete'
+        ];
         if (!empty($data["user"])) {
             $repo = $this->em->getRepository("TVS\Login\Entity\User");
             $data["user"] = $repo->findById($data["user"]);
@@ -23,11 +26,12 @@ class PrivilegeService extends AbstractService {
             $repo = $this->em->getRepository("TVS\Login\Entity\Route");
             $data["route"] = $repo->findById($data["route"]);
         }
-        
-        foreach ($data as $key => $value) {
-            if($value == 'on'){
-                $data[$key] = 1;
+        foreach ($privilegios as $key => $value) {
+            if(!isset($data[$value])){
+                $data[$value] = 0;
+                continue;
             }
+            $data[$value] = 1;       
         }
         return $data;
     }

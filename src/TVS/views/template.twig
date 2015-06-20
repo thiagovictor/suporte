@@ -1,4 +1,14 @@
 <!DOCTYPE html>
+
+{% set class_table = 'table table-hover' %}
+{% set class_btn = 'btn btn-default btn-xs' %}
+{% set class_btn_new = 'glyphicon glyphicon-plus' %}
+{% set class_btn_edit = 'glyphicon glyphicon-pencil' %}
+{% set class_btn_delete = 'glyphicon glyphicon-remove' %}
+{% set class_btn_form_submit = 'btn btn-success' %}
+{% set class_btn_form_return = 'btn btn-danger' %}
+
+
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -22,19 +32,13 @@
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         <li class="dropdown">
-                            <a href="{{ path('user_listar') }}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Usu&aacute;rios <span class="caret"></span></a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Configura&ccedil;&otilde;es<span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href="{{ path('user_new') }}">Novo</a></li>
-                                <li><a href="{{ path('user_listar') }}">Listar</a></li>
+                                <li><a href="{{ path('user_listar') }}">Usu&aacute;rios</a></li>
+                                <li><a href="{{ path('route_listar') }}">Rotas</a></li>
+                                <li><a href="{{ path('privilege_listar') }}">Privil&eacute;gios</a></li>
                             </ul>
-                        </li>
-                         <li class="dropdown">
-                            <a href="{{ path('route_listar') }}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Rotas <span class="caret"></span></a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href="{{ path('route_new') }}">Novo</a></li>
-                                <li><a href="{{ path('route_listar') }}">Listar</a></li>
-                            </ul>
-                        </li>   
+                        </li>  
                     </ul>
                 </div>
             </div>
@@ -43,6 +47,8 @@
         <div >
             <div class="col-md-2"></div>
             <div class="col-md-8">
+            {% block superior %}{% endblock %}
+            <br><br>
             {% block conteudo %}{% endblock %}
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
             <script src="/js/bootstrap.min.js"></script>
