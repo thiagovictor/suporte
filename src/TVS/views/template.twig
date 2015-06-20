@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
-{% set class_table = 'table table-hover' %}
-{% set class_btn = 'btn btn-default btn-xs' %}
+{% set class_table = 'table table-condensed' %}
+{% set class_btn = 'btn btn-default btn-sm' %}
 {% set class_btn_new = 'glyphicon glyphicon-plus' %}
 {% set class_btn_edit = 'glyphicon glyphicon-pencil' %}
 {% set class_btn_delete = 'glyphicon glyphicon-remove' %}
@@ -24,37 +24,48 @@
 
     <body role="document">
         {% block menu %}
-        <nav class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <a class="navbar-brand" >Suporte</a>
+            <nav class="navbar navbar-inverse navbar-fixed-top">
+                <div class="container">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" >Suporte</a>
+                    </div>
+                    <div id="navbar" class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Configura&ccedil;&otilde;es<span class="caret"></span></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="{{ path('user_listar') }}">Usu&aacute;rios</a></li>
+                                    <li><a href="{{ path('route_listar') }}">Rotas</a></li>
+                                    <li><a href="{{ path('privilege_listar') }}">Privil&eacute;gios</a></li>
+                                </ul>
+                            </li>  
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right">
+
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Thiago Santos<span class="caret"></span></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="#">Prefer&ecirc;ncias</a></li>
+                                    <li><a href="#">Alterar senha</a></li>
+                                    <li><a href="{{ path('logout') }}">Sair</a></li>
+                                </ul>
+                            </li> 
+                            <li><img  src="../../img/eu.jpg" style="width: 40px; height: 40px;margin-top: 5px;" class="img-circle" alt=""></li>
+                        </ul>
+                    </div>
                 </div>
-                <div id="navbar" class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Configura&ccedil;&otilde;es<span class="caret"></span></a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href="{{ path('user_listar') }}">Usu&aacute;rios</a></li>
-                                <li><a href="{{ path('route_listar') }}">Rotas</a></li>
-                                <li><a href="{{ path('privilege_listar') }}">Privil&eacute;gios</a></li>
-                            </ul>
-                        </li>  
-                    </ul>
-                </div>
-            </div>
-        </nav>
+            </nav>
+
         {% endblock %}                   
-        <div >
-            <div class="col-md-2"></div>
-            <div class="col-md-8">
-            {% block superior %}{% endblock %}
-            <br><br>
-            {% block conteudo %}{% endblock %}
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-            <script src="/js/bootstrap.min.js"></script>
+        <div class="container" >
+            <div class="jumbotron">
+                {% block superior %}{% endblock %}
+                <br><br>
+                {% block conteudo %}{% endblock %}
             </div>
-            <div class="col-md-2"></div>
         </div>
-</body>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <script src="/js/bootstrap.min.js"></script>
+    </body>
 </html>
 

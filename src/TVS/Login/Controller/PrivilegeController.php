@@ -12,7 +12,7 @@ class PrivilegeController extends AbstractController {
         $this->views = 'login/privilege/privilege';
         $this->bind = 'privilege';
         $this->param_view = 'result';
-        $this->redirect_delete = '/privilege';
+        $this->redirect_delete = '/privileges';
     }
 
     public function connect_extra() {

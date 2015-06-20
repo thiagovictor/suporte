@@ -18,33 +18,49 @@ class Application extends ApplicationSilex {
             $loginService = new Login\Service\LoginService($app['EntityManager'], new Login\Entity\User);
             return $loginService;
         };
-        
+
         $app['RouteService'] = function () use($app) {
             $routeService = new Login\Service\RouteService($app['EntityManager'], new Login\Entity\Route);
             return $routeService;
         };
-        
+
         $app['PrivilegeService'] = function () use($app) {
-            $routeService = new Login\Service\PrivilegeService($app['EntityManager'], new Login\Entity\Privilege);
-            return $routeService;
+            $privileService = new Login\Service\PrivilegeService($app['EntityManager'], new Login\Entity\Privilege);
+            return $privileService;
         };
 
         $app->before(function(Request $request) use ($app) {
             if (!$request->get('non_require_authentication')) {
-                if(!$app['session']->get('user')){
+                if (!$app['session']->get('user')) {
+                    return $app->redirect('/');
+                }
+                if (!$app['PrivilegeService']->isAllowed($app['session']->get('user'), $request)) {
+                    $app['session']->set('error', "Acesso Negado! Permiss&otilde;es insuficientes.");
                     return $app->redirect('/');
                 }
             }
         });
 
         $app->get('/', function () use ($app) {
-                    return $app['twig']->render('login/login.twig', []);
+                    $params = [];
+                    if ($app['session']->get('error')) {
+                        if (!empty($app['session']->get('error'))) {
+                            $params = ['result' => $app['session']->get('error')];
+                            $app['session']->set('error', null);
+                        }
+                    }
+                    return $app['twig']->render('login/login.twig', $params);
                 })->bind('login')
                 ->value('non_require_authentication', true);
 
         $app->get('/index', function () use ($app) {
             return $app['twig']->render('template.twig', []);
         })->bind('inicio');
+
+        $app->get('/logout', function() use ($app) {
+            $app['session']->clear();
+            return $app->redirect('/');
+        })->bind('logout');
 
         $app->mount("/login", new LoginController());
         $app->mount("/routes", new RouteController());
