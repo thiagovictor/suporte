@@ -36,23 +36,6 @@ class PrivilegeService extends AbstractService {
         return $data;
     }
 
-    public function mountArrayRoute($request) {
-        $rotas = ['controller', 'action', 'param'];
-        $route = [];
-        $params = explode("/", substr($request->getRequestUri(), 1, strlen($request->getRequestUri())));
-        foreach ($rotas as $key => $value) {
-            if (isset($params[$key])) {
-                $route[$value] = $params[$key];
-                continue;
-            }
-            $route[$value] = '';
-        }
-        if ('' == $route['action']) {
-            $route['action'] = 'display';
-        }
-        return $route;
-    }
-
     public function isAllowed($user, $request) {
         $route = $this->mountArrayRoute($request);
         $routeRepository = $this->em->getRepository('TVS\Login\Entity\Route');

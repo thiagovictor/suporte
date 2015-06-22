@@ -16,17 +16,17 @@ abstract class AbstractService {
     public function __construct(EntityManager $em) {
         $this->em = $em;
     }
-    
+
     public function checkValues(array $data = array()) {
         $return = true;
         foreach ($data as $metodo => $valor) {
-            if(!$this->checkValidator($metodo, $valor)){
+            if (!$this->checkValidator($metodo, $valor)) {
                 $return = false;
             }
         }
         return $return;
     }
-    
+
     public function checkValidator($metodo, $valor) {
         foreach ($this->validators as $key => $validator) {
             if ($metodo != $key) {
@@ -69,10 +69,11 @@ abstract class AbstractService {
         }
         return false;
     }
-    
+
     public function posValidation() {
         
     }
+
     public function update(array $data = array()) {
         if (!isset($data["id"])) {
             $this->setMessage("Parametro :id nao encontrado");
@@ -97,59 +98,57 @@ abstract class AbstractService {
             $this->setMessage($ex->getMessage());
             return false;
         }
-        
     }
 
     public function findAll() {
         $repo = $this->em->getRepository($this->entity);
         return $repo->findAll();
     }
-    
+
     protected function toArray($objects) {
-        if(!isset($objects[0])){
+        if (!isset($objects[0])) {
             return array();
         }
         $methods = get_class_methods($objects[0]);
         $prop = array();
-        for ($i=0;$i < sizeof($methods); $i++){
-            if(substr($methods[$i],0,3) == 'get'){
+        for ($i = 0; $i < sizeof($methods); $i++) {
+            if (substr($methods[$i], 0, 3) == 'get') {
                 $prop[$methods[$i]] = str_replace('get', '', $methods[$i]);
                 continue;
             }
         }
-        
+
         foreach ($objects as $tag) {
             $data = array();
             foreach ($prop as $key => $value) {
                 $object = $tag->$key();
-                if(is_object($object)){
-                    $data[$value] = $this->toArray([0=>$object]);
+                if (is_object($object)) {
+                    $data[$value] = $this->toArray([0 => $object]);
                     continue;
                 }
-                if(is_array($object)){
-                   $data[$value] = $this->toArray($object);
+                if (is_array($object)) {
+                    $data[$value] = $this->toArray($object);
                     continue;
                 }
-                $data[$value] = $tag->$key(); 
+                $data[$value] = $tag->$key();
             }
             $return[] = $data;
         }
         return $return;
     }
-    
+
     public function findAllToArray() {
         $repo = $this->em->getRepository($this->entity);
         $objects = $repo->findAll();
         return $this->toArray($objects);
-        
     }
-    
+
     public function findToArray($id) {
         $repo = $this->em->getRepository($this->entity);
         $object = $repo->find($id);
-        return $this->toArray([0=>$object]);
+        return $this->toArray([0 => $object]);
     }
-    
+
     public function findPagination($firstResult, $maxResults) {
         $repo = $this->em->getRepository($this->entity);
         return $repo->findPagination($firstResult, $maxResults);
@@ -182,6 +181,23 @@ abstract class AbstractService {
     function setArrayValidators(array $validators) {
         $this->validators = $validators;
         return $this;
+    }
+
+    public function mountArrayRoute($request) {
+        $rotas = ['controller', 'action', 'param'];
+        $route = [];
+        $params = explode("/", substr($request->getRequestUri(), 1, strlen($request->getRequestUri())));
+        foreach ($rotas as $key => $value) {
+            if (isset($params[$key])) {
+                $route[$value] = $params[$key];
+                continue;
+            }
+            $route[$value] = '';
+        }
+        if ('' == $route['action']) {
+            $route['action'] = 'display';
+        }
+        return $route;
     }
 
 }
