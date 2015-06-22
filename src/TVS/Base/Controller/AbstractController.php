@@ -28,17 +28,17 @@ class AbstractController implements ControllerProviderInterface {
         
         $this->connect_extra();
         
-        $this->controller->get('/', function () use ($app) {
+        $this->controller->get('/', function (Request $request) use ($app) {
             $result = $app[$this->service]->findPagination(0, $this->registros_por_pagina);
-            return $app['twig']->render($this->views.'.twig', [$this->param_view  => $result, 'page_atual' => 1, 'numero_paginas' => ceil($app[$this->service]->getRows() / $this->registros_por_pagina)]);
+            return $app['twig']->render($this->views.'.twig', [$this->param_view  => $result, 'page_atual' => 1, 'pagination' => $app[$this->service]->pagination($request,1,$this->registros_por_pagina)]);
         })->bind($this->bind.'_listar');
 
-        $this->controller->get('/page/{page}', function ($page) use ($app) {
+        $this->controller->get('/page/{page}', function ($page,  Request $request) use ($app) {
             if ($page < 1 or $page > ceil($app[$this->service]->getRows() / $this->registros_por_pagina)) {
                 $page = 1;
             }
             $result = $app[$this->service]->findPagination((($page - 1) * $this->registros_por_pagina), $this->registros_por_pagina);
-            return $app['twig']->render($this->views.'.twig', [$this->param_view  => $result, 'page_atual' => $page, 'numero_paginas' => ceil($app[$this->service]->getRows() / $this->registros_por_pagina)]);
+            return $app['twig']->render($this->views.'.twig', [$this->param_view  => $result, 'page_atual' => $page, 'pagination' => $app[$this->service]->pagination($request,$page,$this->registros_por_pagina)]);
         })->bind($this->bind.'_listar_pagination');
 
         $this->controller->get('/new', function () use ($app) {

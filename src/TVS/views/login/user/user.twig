@@ -37,27 +37,7 @@
             {% endfor %}
         </tbody>
     </table>
-    <div class="row">
-        <div class="col-md-4"></div>
-        <div class="col-md-4">
-            <nav>
-                <ul class="pagination">
-                    {%for i in 1..numero_paginas%}
-                        {%if loop.first %}
-                            <li class="prev {%if page_atual==1%} disabled{%endif%}"><a {%if page_atual > 1%} href="{{path('user_listar_pagination',{'page':page_atual-1})}}" {%endif%}><<</a></li>
-                        {%endif%}
-                            {%if numero_paginas > 0 %}
-                            <li {%if page_atual==loop.index%} class="active"{%endif%}><a href="{{path('user_listar_pagination',{'page':loop.index})}}">{{loop.index}}</a></li> 
-                            {% endif%}
-                        {%if loop.last %}
-                            <li class="next{%if page_atual==numero_paginas%} disabled {%endif%}"><a {%if page_atual < numero_paginas%} href="{{path('user_listar_pagination',{'page':page_atual+1})}}" {%endif%}>>></a></li>
-                        {%endif%}
-                    {%endfor%}
-                </ul>
-            </nav>
-        </div>
-        <div class="col-md-4"></div>
-    </div>
+    {{ pagination|raw}}
 
 
 {% endblock %}

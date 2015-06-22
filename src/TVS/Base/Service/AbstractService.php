@@ -194,10 +194,61 @@ abstract class AbstractService {
             }
             $route[$value] = '';
         }
-        if ('' == $route['action']) {
+        if ('' == $route['action'] or $route["action"] == "page") {
             $route['action'] = 'display';
         }
         return $route;
+    }
+
+    public function pagination($request, $page_atual, $registros_por_pagina) {
+        $numero_paginas = ceil($this->getRows() / $registros_por_pagina);
+        $route = $this->mountArrayRoute($request);
+        $disabled_prev = '';
+        if ($page_atual == 1) {
+            $disabled_prev = 'disabled';
+        }
+        $disabled_next = '';
+        if ($page_atual >= $numero_paginas) {
+            $disabled_next = 'disabled';
+        }
+        $link_prev = '';
+        if ($page_atual > 1) {
+            $page_prev = $page_atual - 1;
+            $link = "href='/{$route["controller"]}/page/{$page_prev}'";
+        }
+
+        $link_next = '';
+        if ($page_atual < $numero_paginas) {
+            $page_prev = $page_atual + 1;
+            $link = "href='/{$route["controller"]}/page/{$link_next}'";
+        }
+        $return = '<div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <nav>
+                    <ul class="pagination">';
+                        for ($i = 1; $i <= $numero_paginas; $i++) {
+                            if ($i == 1) {
+                                $return .= '<li class="prev ' . $disabled_prev . '"><a ' . $link_prev . '>Anterior</a></li>';
+                            }
+                            if ($numero_paginas > 0) {
+                                $return .= '<li ';
+                                if ($page_atual == $i) {
+                                    $return .= 'class="active"';
+                                }
+                                $return .= "><a href='/{$route["controller"]}/page/{$i}'>{$i}</a></li>";
+                            }
+                            if ($i + 1 > $numero_paginas) {
+                                $return .= '<li class="next ' . $disabled_next . '"><a ' . $link_next . '>Pr&oacute;ximo</a></li>';
+                            }
+                        }
+                    $return .= '</ul>
+                </nav>
+            </div>
+            <div class="col-md-4"></div>
+        </div>';
+
+        return $return;
     }
 
 }
