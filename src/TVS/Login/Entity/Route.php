@@ -39,5 +39,12 @@ class Route {
         $this->route = $route;
         return $this;
     }
+    
+    function toArray() {
+        return [
+            'id'=>  $this->getId(),
+            'route' => $this->getRoute()
+        ];
+    }
 
 }

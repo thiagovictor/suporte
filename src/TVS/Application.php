@@ -23,7 +23,10 @@ class Application extends ApplicationSilex {
             $routeService = new Login\Service\RouteService($app['EntityManager'], new Login\Entity\Route);
             return $routeService;
         };
-
+        $app['RouteForm'] = function () use($app) {
+            return $app['form.factory']->createBuilder(new Login\Form\RouteForm())->getForm();   
+        };
+        
         $app['PrivilegeService'] = function () use($app) {
             $privileService = new Login\Service\PrivilegeService($app['EntityManager'], new Login\Entity\Privilege);
             return $privileService;

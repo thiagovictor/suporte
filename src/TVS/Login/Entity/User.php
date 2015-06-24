@@ -10,8 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="TVS\Login\Entity\UserRepository")
  */
-class User
-{
+class User {
+
     /**
      * @var integer
      *
@@ -56,7 +56,6 @@ class User
      */
     protected $ativo;
 
-    
     public function getId() {
         return $this->id;
     }
@@ -77,7 +76,6 @@ class User
         return $this->salt;
     }
 
-
     public function getAtivo() {
         return $this->ativo;
     }
@@ -97,17 +95,17 @@ class User
     }
 
     public function setPassword($password) {
-        if ($this->salt == NULL){
-            $this->salt = base_convert(sha1(uniqid(mt_rand(),true)), 16, 36);
+        if ($this->salt == NULL) {
+            $this->salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
         }
         $this->password = $this->encryptedPassword($password);
         return $this;
     }
-    
-    public function encryptedPassword($password){
-        $hashSenha = hash('sha512', $password.$this->salt);
-        for($i=0;$i<64000;$i++){
-            $hashSenha = hash ('sha512', $hashSenha);
+
+    public function encryptedPassword($password) {
+        $hashSenha = hash('sha512', $password . $this->salt);
+        for ($i = 0; $i < 64000; $i++) {
+            $hashSenha = hash('sha512', $hashSenha);
         }
         return $hashSenha;
     }
@@ -116,12 +114,25 @@ class User
         $this->ativo = $ativo;
         return $this;
     }
+
     public function setSalt($salt) {
         $this->salt = $salt;
         return $this;
     }
-    
+
     public function __toString() {
         return $this->username;
-    }  
+    }
+
+    public function toArray() {
+        return [
+            'id' => $this->getId(),
+            'username' => $this->getUsername(),
+            'password' => $this->getPassword(),
+            'salt' => $this->getSalt(),
+            'email' => $this->getEmail(),
+            'ativo' => $this->getAtivo()
+        ];
+    }
+
 }

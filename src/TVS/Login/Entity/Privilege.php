@@ -16,7 +16,7 @@ class Privilege {
      * @ORM\GeneratedValue 
      */
     private $id;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="Route")
      * @ORM\JoinColumn(name="route_id", referencedColumnName="id", onDelete="SET NULL")
@@ -27,28 +27,28 @@ class Privilege {
      * @ORM\Column(name="display", type="boolean", nullable=true) 
      */
     private $display;
-    
+
     /**
      * @ORM\Column(name="new", type="boolean", nullable=true) 
      */
     private $new;
-    
+
     /**
      * @ORM\Column(name="edit", type="boolean", nullable=true) 
      */
     private $edit;
-    
+
     /**
      * @ORM\Column(name="remove", type="boolean", nullable=true) 
      */
     private $delete;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="SET NULL")
      */
     private $user;
-    
+
     function getRoute() {
         return $this->route;
     }
@@ -66,7 +66,7 @@ class Privilege {
         $this->user = $user;
         return $this;
     }
-    
+
     function getId() {
         return $this->id;
     }
@@ -112,7 +112,15 @@ class Privilege {
         return $this;
     }
 
-
-
+    public function toArray() {
+        return [
+            'id' => $this->getId(),
+            'route' => $this->getRoute(),
+            'display' => $this->getDisplay(),
+            'new' => $this->getNew(),
+            'edit' => $this->getEdit(),
+            'delete' => $this->getDelete()
+        ];
+    }
 
 }
