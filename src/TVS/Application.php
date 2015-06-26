@@ -18,6 +18,14 @@ class Application extends ApplicationSilex {
             $loginService = new Login\Service\LoginService($app['EntityManager'], new Login\Entity\User);
             return $loginService;
         };
+        
+        $app['UserForm'] = function () use($app) {
+            return $app['form.factory']->createBuilder(new Login\Form\UserType())->getForm();   
+        };
+        
+        $app['UserFormEdit'] = function () use($app) {
+            return $app['form.factory']->createBuilder(new Login\Form\UserEditType())->getForm();   
+        };
 
         $app['RouteService'] = function () use($app) {
             $routeService = new Login\Service\RouteService($app['EntityManager'], new Login\Entity\Route);

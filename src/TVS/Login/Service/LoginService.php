@@ -15,7 +15,7 @@ class LoginService extends AbstractService {
     }
 
     public function ajustaData(array $data = array()) {
-        if ($data["password"] == 'xxxxxx') {
+        if ($data["password"] == '') {
             unset($data["password"]);
         }
         if (isset($data["ativo"])) {

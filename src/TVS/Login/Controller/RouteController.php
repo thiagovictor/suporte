@@ -10,11 +10,12 @@ class RouteController extends AbstractController {
         $this->registros_por_pagina = 5;
         $this->service = 'RouteService';
         $this->form = 'RouteForm';
-        $this->views = 'login/route/route';
         $this->bind = 'route';
         $this->param_view = 'result';
         $this->redirect_delete = '/routes';
-        $this->view_default = 'login/default/default';
+        $this->view_new = 'login/default/default_new.twig';
+        $this->view_edit = 'login/default/default_edit.twig';
+        $this->view_list = 'login/route/route.twig';
     }
 
     public function connect_extra() {

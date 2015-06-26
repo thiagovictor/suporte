@@ -9,35 +9,11 @@ abstract class AbstractService {
 
     protected $em;
     protected $message = array();
-    protected $validators = array();
     protected $object;
     protected $entity;
 
     public function __construct(EntityManager $em) {
         $this->em = $em;
-    }
-
-    public function checkValues(array $data = array()) {
-        $return = true;
-        foreach ($data as $metodo => $valor) {
-            if (!$this->checkValidator($metodo, $valor)) {
-                $return = false;
-            }
-        }
-        return $return;
-    }
-
-    public function checkValidator($metodo, $valor) {
-        foreach ($this->validators as $key => $validator) {
-            if ($metodo != $key) {
-                continue;
-            }
-            if (!$validator->isValid($valor)) {
-                $this->message[] = strtoupper($key) . " : " . $validator->getMessage();
-                return false;
-            }
-        }
-        return true;
     }
 
     public function ajustaData(array $data = array()) {
@@ -46,10 +22,6 @@ abstract class AbstractService {
 
     private function popular(array $data = array()) {
         $data_checked = $this->ajustaData($data);
-        if (!$this->checkValues($data_checked)) {
-            return false;
-        }
-        $this->posValidation();
         foreach ($data_checked as $metodo => $valor) {
             $metodo = 'set' . ucfirst($metodo);
             if (!method_exists($this->object, $metodo)) {
@@ -69,11 +41,7 @@ abstract class AbstractService {
         }
         return false;
     }
-
-    public function posValidation() {
-        
-    }
-
+    
     public function update(array $data = array()) {
         if (!isset($data["id"])) {
             $this->setMessage("Parametro :id nao encontrado");
@@ -173,16 +141,6 @@ abstract class AbstractService {
         return $this;
     }
 
-    function setValidators($indice, $validator) {
-        $this->validators[$indice] = $validator;
-        return $this;
-    }
-
-    function setArrayValidators(array $validators) {
-        $this->validators = $validators;
-        return $this;
-    }
-
     public function mountArrayRoute($request) {
         $rotas = ['controller', 'action', 'param'];
         $route = [];
@@ -250,5 +208,5 @@ abstract class AbstractService {
 
         return $return;
     }
-
+    
 }
