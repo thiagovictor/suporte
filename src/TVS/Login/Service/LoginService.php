@@ -18,7 +18,11 @@ class LoginService extends AbstractService {
         if ($data["password"] == '') {
             unset($data["password"]);
         }
-        if (isset($data["ativo"])) {
+        if (!isset($data["ativo"])) {
+            $data["ativo"] = 0;
+            return $data;
+        }
+        if($data["ativo"]){
             $data["ativo"] = 1;
             return $data;
         }
