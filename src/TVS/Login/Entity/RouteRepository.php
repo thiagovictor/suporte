@@ -28,5 +28,14 @@ class RouteRepository extends EntityRepository {
         }
         return false;
     }
+    
+    public function fatchPairs() {
+        $entities = $this->findAll();
+        $array = array();
+        foreach ($entities as $entity) {
+            $array[$entity->getId()] = $entity->getRoute();
+        }
+        return $array;
+    }
 
 }

@@ -24,11 +24,7 @@ class AbstractController implements ControllerProviderInterface {
     protected function connect_extra() {
         
     }
-
-    protected function getParams() {
-        return [];
-    }
-
+    
     public function connect(Application $app) {
         $this->controller = $app['controllers_factory'];
         $this->app = $app;
@@ -58,12 +54,11 @@ class AbstractController implements ControllerProviderInterface {
                 return $app['twig']->render($this->view_new, [
                             "success" => $result,
                             "Message" => $serviceManager->getMessage(),
-                            "params" => $this->getParams(),
                             "form" => $form->createView(),
                             "route" => $serviceManager->mountArrayRoute($request)
                 ]);
             }
-            return $app['twig']->render($this->view_new, ["Message" => array(), "params" => $this->getParams(), "form" => $form->createView(), "route" => $serviceManager->mountArrayRoute($request)]);
+            return $app['twig']->render($this->view_new, ["Message" => array(), "form" => $form->createView(), "route" => $serviceManager->mountArrayRoute($request)]);
         })->bind($this->bind . '_new');
 
         $this->controller->match('/edit/{id}', function ($id, Request $request) use ($app) {

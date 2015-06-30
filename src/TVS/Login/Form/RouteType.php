@@ -7,7 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Length;
 
-class PrivilegeForm extends AbstractType 
+class RouteType extends AbstractType 
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -20,6 +20,6 @@ class PrivilegeForm extends AbstractType
 
     public function getName()
     {
-        return 'PrivilegeForm';
+        return 'RouteForm';
     }
 }

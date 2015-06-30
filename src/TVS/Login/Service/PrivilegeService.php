@@ -27,11 +27,11 @@ class PrivilegeService extends AbstractService {
             $data["route"] = $repo->findById($data["route"]);
         }
         foreach ($privilegios as $key => $value) {
-            if (!isset($data[$value])) {
-                $data[$value] = 0;
+            if ($data[$value]) {
+                $data[$value] = 1;
                 continue;
             }
-            $data[$value] = 1;
+            $data[$value] = 0;
         }
         return $data;
     }

@@ -115,7 +115,8 @@ class Privilege {
     public function toArray() {
         return [
             'id' => $this->getId(),
-            'route' => $this->getRoute(),
+            'user' => $this->getUser()->getId(),
+            'route' => $this->getRoute()->getId(),
             'display' => $this->getDisplay(),
             'new' => $this->getNew(),
             'edit' => $this->getEdit(),

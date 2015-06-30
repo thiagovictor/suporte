@@ -31,13 +31,18 @@ class Application extends ApplicationSilex {
             $routeService = new Login\Service\RouteService($app['EntityManager'], new Login\Entity\Route);
             return $routeService;
         };
+        
         $app['RouteForm'] = function () use($app) {
-            return $app['form.factory']->createBuilder(new Login\Form\RouteForm())->getForm();   
+            return $app['form.factory']->createBuilder(new Login\Form\RouteType())->getForm();   
         };
         
         $app['PrivilegeService'] = function () use($app) {
             $privileService = new Login\Service\PrivilegeService($app['EntityManager'], new Login\Entity\Privilege);
             return $privileService;
+        };
+        
+        $app['PrivilegeForm'] = function () use($app) {
+            return $app['form.factory']->createBuilder(new Login\Form\PrivilegeType($app))->getForm();   
         };
 
         $app->before(function(Request $request) use ($app) {

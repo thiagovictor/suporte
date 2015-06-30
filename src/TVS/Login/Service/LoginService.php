@@ -18,10 +18,6 @@ class LoginService extends AbstractService {
         if ($data["password"] == '') {
             unset($data["password"]);
         }
-        if (!isset($data["ativo"])) {
-            $data["ativo"] = 0;
-            return $data;
-        }
         if($data["ativo"]){
             $data["ativo"] = 1;
             return $data;
@@ -34,10 +30,4 @@ class LoginService extends AbstractService {
         $repo = $this->em->getRepository($this->entity);
         return $repo->findByUsernameAndPassword($username, $password);
     }
-
-    public function fatchPairs() {
-        $repo = $this->em->getRepository($this->entity);
-        return $repo->fatchPairs();
-    }
-
 }

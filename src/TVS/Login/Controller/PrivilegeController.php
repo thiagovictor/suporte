@@ -15,19 +15,11 @@ class PrivilegeController extends AbstractController {
         $this->view_new = 'login/default/default_new.twig';
         $this->view_edit = 'login/default/default_edit.twig';
         $this->view_list = 'login/privilege/privilege.twig';
-        $this->form_new = 'PrivilegeForm';
+        $this->form = 'PrivilegeForm';
     }
 
     public function connect_extra() {
         
-    }
-    
-    public function getParams() {
-        $app = $this->app;
-        $result = [];
-        $result["users"] = $app['LoginService']->findAll();
-        $result["routes"] = $app['RouteService']->findAll();
-        return $result;       
     }
 
 }

@@ -104,7 +104,12 @@ abstract class AbstractService {
         }
         return $return;
     }
-
+    
+    public function fatchPairs() {
+        $repo = $this->em->getRepository($this->entity);
+        return $repo->fatchPairs();
+    }
+    
     public function findAllToArray() {
         $repo = $this->em->getRepository($this->entity);
         $objects = $repo->findAll();
