@@ -36,22 +36,4 @@ class PrivilegeService extends AbstractService {
         return $data;
     }
 
-    public function isAllowed($user, $request) {
-        $route = $this->mountArrayRoute($request);
-        $routeRepository = $this->em->getRepository('TVS\Login\Entity\Route');
-        $objectRoute = $routeRepository->findOneByRoute($route['controller']);
-        $PrivilegeRepositoty = $this->em->getRepository($this->entity);
-        $objectPrivilege = $PrivilegeRepositoty->findOneBy(array('user' => $user, 'route' => $objectRoute));
-        $getAction = 'get'.ucfirst($route['action']);
-        if($objectPrivilege){
-            return $objectPrivilege->$getAction();
-        }
-        $objectRouteGeneric = $routeRepository->findOneByRoute('*');
-        $objectPrivilegeGeneric = $PrivilegeRepositoty->findOneBy(array('user' => $user, 'route' => $objectRouteGeneric)); 
-        if($objectPrivilegeGeneric){
-            return $objectPrivilegeGeneric->$getAction();
-        }
-        return false;    
-    }
-
 }

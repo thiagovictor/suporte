@@ -24,26 +24,38 @@ class AbstractController implements ControllerProviderInterface {
     protected function connect_extra() {
         
     }
-    
+
     public function connect(Application $app) {
         $this->controller = $app['controllers_factory'];
         $this->app = $app;
 
         $this->connect_extra();
 
+        //####LISTAGEM INICIAL#######
         $this->controller->get('/', function (Request $request) use ($app) {
             $result = $app[$this->service]->findPagination(0, $this->registros_por_pagina);
-            return $app['twig']->render($this->view_list, [$this->param_view => $result, 'page_atual' => 1, 'pagination' => $app[$this->service]->pagination($request, 1, $this->registros_por_pagina)]);
+            return $app['twig']->render($this->view_list, [
+                        $this->param_view => $result,
+                        'page_atual' => 1,
+                        'pagination' => $app[$this->service]->pagination($request, 1, $this->registros_por_pagina)
+            ]);
         })->bind($this->bind . '_listar');
 
+
+        //####LISTAGEM PAGINADA#######
         $this->controller->get('/page/{page}', function ($page, Request $request) use ($app) {
             if ($page < 1 or $page > ceil($app[$this->service]->getRows() / $this->registros_por_pagina)) {
                 $page = 1;
             }
             $result = $app[$this->service]->findPagination((($page - 1) * $this->registros_por_pagina), $this->registros_por_pagina);
-            return $app['twig']->render($this->view_list, [$this->param_view => $result, 'page_atual' => $page, 'pagination' => $app[$this->service]->pagination($request, $page, $this->registros_por_pagina)]);
+            return $app['twig']->render($this->view_list, [
+                        $this->param_view => $result,
+                        'page_atual' => $page,
+                        'pagination' => $app[$this->service]->pagination($request, $page, $this->registros_por_pagina)
+            ]);
         })->bind($this->bind . '_listar_pagination');
 
+        //####NOVO REGISTRO#######
         $this->controller->match('/new', function (Request $request) use ($app) {
             $form = $app[$this->form];
             $form->handleRequest($request);
@@ -58,9 +70,14 @@ class AbstractController implements ControllerProviderInterface {
                             "route" => $serviceManager->mountArrayRoute($request)
                 ]);
             }
-            return $app['twig']->render($this->view_new, ["Message" => array(), "form" => $form->createView(), "route" => $serviceManager->mountArrayRoute($request)]);
+            return $app['twig']->render($this->view_new, [
+                        "Message" => array(),
+                        "form" => $form->createView(),
+                        "route" => $serviceManager->mountArrayRoute($request)
+            ]);
         })->bind($this->bind . '_new');
 
+        //####EDITANDO REGISTRO#######
         $this->controller->match('/edit/{id}', function ($id, Request $request) use ($app) {
             $form = $app[$this->form];
             if ($this->form_edit) {
@@ -75,17 +92,17 @@ class AbstractController implements ControllerProviderInterface {
                 $data = $form->getData();
                 $data["id"] = $id;
                 $serviceManager->update($data);
-                return $app->redirect("/" . $route["controller"]);
+                return $app->redirect($app["url_generator"]->generate($this->bind . '_listar'));
             }
-
             $result = $serviceManager->find($id);
             $form->setData($result->toArray());
             return $app['twig']->render($this->view_edit, ["form" => $form->createView(), "Message" => $serviceManager->getMessage(), "route" => $serviceManager->mountArrayRoute($request)]);
         })->bind($this->bind . '_edit');
 
+        //####REMOVE REGISTRO#######
         $this->controller->get('/delete/{id}', function ($id) use ($app) {
             $app[$this->service]->delete($id);
-            return $app->redirect($this->redirect_delete);
+            return $app->redirect($app["url_generator"]->generate($this->bind . '_listar'));
         })->bind($this->bind . '_delete');
 
 

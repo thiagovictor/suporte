@@ -41,7 +41,7 @@ abstract class AbstractService {
         }
         return false;
     }
-    
+
     public function update(array $data = array()) {
         if (!isset($data["id"])) {
             $this->setMessage("Parametro :id nao encontrado");
@@ -104,12 +104,12 @@ abstract class AbstractService {
         }
         return $return;
     }
-    
+
     public function fatchPairs() {
         $repo = $this->em->getRepository($this->entity);
         return $repo->fatchPairs();
     }
-    
+
     public function findAllToArray() {
         $repo = $this->em->getRepository($this->entity);
         $objects = $repo->findAll();
@@ -163,6 +163,27 @@ abstract class AbstractService {
         return $route;
     }
 
+    public function isAllowed($user, $request, $objectToArray = false) {
+        $route = $this->mountArrayRoute($request);
+        $routeRepository = $this->em->getRepository('TVS\Login\Entity\Route');
+        $objectRoute = $routeRepository->findOneByRoute($route['controller']);
+        $PrivilegeRepositoty = $this->em->getRepository('TVS\Login\Entity\Privilege');
+        $objectPrivilege = $PrivilegeRepositoty->findOneBy(array('user' => $user, 'route' => $objectRoute));
+        if ($objectToArray) {
+            return $objectPrivilege->toArray();
+        }
+        $getAction = 'get' . ucfirst($route['action']);
+        if ($objectPrivilege) {
+            return $objectPrivilege->$getAction();
+        }
+        $objectRouteGeneric = $routeRepository->findOneByRoute('*');
+        $objectPrivilegeGeneric = $PrivilegeRepositoty->findOneBy(array('user' => $user, 'route' => $objectRouteGeneric));
+        if ($objectPrivilegeGeneric) {
+            return $objectPrivilegeGeneric->$getAction();
+        }
+        return false;
+    }
+
     public function pagination($request, $page_atual, $registros_por_pagina) {
         $numero_paginas = ceil($this->getRows() / $registros_por_pagina);
         $route = $this->mountArrayRoute($request);
@@ -190,22 +211,22 @@ abstract class AbstractService {
             <div class="col-md-4">
                 <nav>
                     <ul class="pagination">';
-                        for ($i = 1; $i <= $numero_paginas; $i++) {
-                            if ($i == 1) {
-                                $return .= '<li class="prev ' . $disabled_prev . '"><a ' . $link_prev . '>Anterior</a></li>';
-                            }
-                            if ($numero_paginas > 0) {
-                                $return .= '<li ';
-                                if ($page_atual == $i) {
-                                    $return .= 'class="active"';
-                                }
-                                $return .= "><a href='/{$route["controller"]}/page/{$i}'>{$i}</a></li>";
-                            }
-                            if ($i + 1 > $numero_paginas) {
-                                $return .= '<li class="next ' . $disabled_next . '"><a ' . $link_next . '>Pr&oacute;ximo</a></li>';
-                            }
-                        }
-                    $return .= '</ul>
+        for ($i = 1; $i <= $numero_paginas; $i++) {
+            if ($i == 1) {
+                $return .= '<li class="prev ' . $disabled_prev . '"><a ' . $link_prev . '>Anterior</a></li>';
+            }
+            if ($numero_paginas > 0) {
+                $return .= '<li ';
+                if ($page_atual == $i) {
+                    $return .= 'class="active"';
+                }
+                $return .= "><a href='/{$route["controller"]}/page/{$i}'>{$i}</a></li>";
+            }
+            if ($i + 1 > $numero_paginas) {
+                $return .= '<li class="next ' . $disabled_next . '"><a ' . $link_next . '>Pr&oacute;ximo</a></li>';
+            }
+        }
+        $return .= '</ul>
                 </nav>
             </div>
             <div class="col-md-4"></div>
@@ -213,5 +234,5 @@ abstract class AbstractService {
 
         return $return;
     }
-    
+
 }
