@@ -25,7 +25,7 @@ abstract class AbstractService {
         foreach ($data_checked as $metodo => $valor) {
             $metodo = 'set' . ucfirst($metodo);
             if (!method_exists($this->object, $metodo)) {
-                $this->setMessage("Nao foi possivel converte-lo, verifique os atributos enviados");
+                $this->setMessage("N&atilde;o foi poss&iacute;vel converter, verifique os atributos enviados");
                 return false;
             }
             $this->object->$metodo($valor);
@@ -37,6 +37,7 @@ abstract class AbstractService {
         if ($this->popular($data)) {
             $this->em->persist($this->object);
             $this->em->flush();
+            $this->setMessage("Registro adicionado com sucesso!");
             return true;
         }
         return false;
@@ -44,7 +45,7 @@ abstract class AbstractService {
 
     public function update(array $data = array()) {
         if (!isset($data["id"])) {
-            $this->setMessage("Parametro :id nao encontrado");
+            $this->setMessage("Par&acirc;metro :id nao encontrado");
             return false;
         }
         $this->object = $this->em->getReference($this->entity, $data["id"]);
@@ -53,6 +54,7 @@ abstract class AbstractService {
         }
         $this->em->persist($this->object);
         $this->em->flush();
+         $this->setMessage("Registro atualizado com sucesso!");
         return true;
     }
 
@@ -61,6 +63,7 @@ abstract class AbstractService {
         $this->em->remove($this->object);
         try {
             $this->em->flush();
+             $this->setMessage("Registro removido com sucesso!");
             return true;
         } catch (ForeignKeyConstraintViolationException $ex) {
             $this->setMessage($ex->getMessage());

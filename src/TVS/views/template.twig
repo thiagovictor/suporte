@@ -7,6 +7,7 @@
 {% set class_btn_delete = 'glyphicon glyphicon-remove' %}
 {% set class_btn_form_submit = 'btn btn-success' %}
 {% set class_btn_form_return = 'btn btn-danger' %}
+{% set class_panel = 'panel panel-default' %}
 
 
 <html lang="en">
@@ -58,15 +59,22 @@
 
         {% endblock %}                   
         <div class="container" >
-            <div class="jumbotron" style="background-color: #ffffff">
-                {% block superior %}{% endblock %}
-                <br><br>
-                {% block conteudo %}{% endblock %}
+           <div class="{{class_panel}}">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {% block tituloPainel %}{% endblock %}
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    {% block superior %}{% endblock %}
+                    <br><br>
+                    {% block conteudo %}{% endblock %}
+                </div>
             </div>
         </div>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
         <script src="/js/bootstrap.min.js"></script>
-        <div style="position: absolute; bottom: 0;width: 100%;text-align: center">Copyright (c) 2013 - {{ "now"|date("Y") }} Infosay. Todos os direitos reservados.</div>
+        <div class="panel-footer" style="position: absolute; bottom: 0;width: 100%;text-align: center">Copyright (c) 2013 - {{ "now"|date("Y") }} Infosay. Todos os direitos reservados.</div>
     </body>
 </html>
 

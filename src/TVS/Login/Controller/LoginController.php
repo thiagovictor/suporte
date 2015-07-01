@@ -12,12 +12,12 @@ class LoginController extends AbstractController {
         $this->service = 'LoginService';
         $this->bind = 'user';
         $this->param_view = 'result';
-        $this->redirect_delete = '/login';
         $this->view_new = 'login/default/default_new.twig';
         $this->view_edit = 'login/default/default_edit.twig';
         $this->view_list = 'login/user/user.twig';
         $this->form = 'UserForm';
         $this->form_edit = 'UserFormEdit';
+        $this->titulo = "Usu&aacute;rios";
     }
 
     public function connect_extra() {

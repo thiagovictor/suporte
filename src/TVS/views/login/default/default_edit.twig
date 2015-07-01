@@ -1,5 +1,5 @@
 {% extends "template.twig" %}
-
+{% block tituloPainel %}{{ titulo | raw }}{% endblock %}
 {% block conteudo %}
 
     {% for mens in Message %}

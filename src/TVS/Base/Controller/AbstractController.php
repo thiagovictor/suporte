@@ -17,8 +17,8 @@ class AbstractController implements ControllerProviderInterface {
     protected $view_list;
     protected $bind;
     protected $param_view;
-    protected $redirect_delete;
     protected $controller;
+    protected $titulo;
     protected $app;
 
     protected function connect_extra() {
@@ -37,6 +37,7 @@ class AbstractController implements ControllerProviderInterface {
             return $app['twig']->render($this->view_list, [
                         $this->param_view => $result,
                         'page_atual' => 1,
+                        'titulo' => $this->titulo,
                         'pagination' => $app[$this->service]->pagination($request, 1, $this->registros_por_pagina)
             ]);
         })->bind($this->bind . '_listar');
@@ -51,6 +52,7 @@ class AbstractController implements ControllerProviderInterface {
             return $app['twig']->render($this->view_list, [
                         $this->param_view => $result,
                         'page_atual' => $page,
+                        'titulo' => $this->titulo,
                         'pagination' => $app[$this->service]->pagination($request, $page, $this->registros_por_pagina)
             ]);
         })->bind($this->bind . '_listar_pagination');
@@ -66,6 +68,7 @@ class AbstractController implements ControllerProviderInterface {
                 return $app['twig']->render($this->view_new, [
                             "success" => $result,
                             "Message" => $serviceManager->getMessage(),
+                            'titulo' => $this->titulo,
                             "form" => $form->createView(),
                             "route" => $serviceManager->mountArrayRoute($request)
                 ]);
@@ -73,6 +76,7 @@ class AbstractController implements ControllerProviderInterface {
             return $app['twig']->render($this->view_new, [
                         "Message" => array(),
                         "form" => $form->createView(),
+                        'titulo' => $this->titulo,
                         "route" => $serviceManager->mountArrayRoute($request)
             ]);
         })->bind($this->bind . '_new');
@@ -92,19 +96,40 @@ class AbstractController implements ControllerProviderInterface {
                 $data = $form->getData();
                 $data["id"] = $id;
                 $serviceManager->update($data);
-                return $app->redirect($app["url_generator"]->generate($this->bind . '_listar'));
+                //return $app->redirect($app["url_generator"]->generate($this->bind . '_listar'));
+                $result = $app[$this->service]->findPagination(0, $this->registros_por_pagina);
+                return $app['twig']->render($this->view_list, [
+                            $this->param_view => $result,
+                            'page_atual' => 1,
+                            'Message' => $serviceManager->getMessage(),
+                            'titulo' => $this->titulo,
+                            'pagination' => $app[$this->service]->pagination($request, 1, $this->registros_por_pagina)
+                ]);
             }
             $result = $serviceManager->find($id);
             $form->setData($result->toArray());
-            return $app['twig']->render($this->view_edit, ["form" => $form->createView(), "Message" => $serviceManager->getMessage(), "route" => $serviceManager->mountArrayRoute($request)]);
+            return $app['twig']->render($this->view_edit, [
+                        "form" => $form->createView(),
+                        'titulo' => $this->titulo,
+                        "Message" => $serviceManager->getMessage(),
+                        "route" => $serviceManager->mountArrayRoute($request)
+            ]);
         })->bind($this->bind . '_edit');
 
         //####REMOVE REGISTRO#######
-        $this->controller->get('/delete/{id}', function ($id) use ($app) {
-            $app[$this->service]->delete($id);
-            return $app->redirect($app["url_generator"]->generate($this->bind . '_listar'));
+        $this->controller->get('/delete/{id}', function ($id, Request $request) use ($app) {
+            $serviceManager = $app[$this->service];
+            $serviceManager->delete($id);
+            //return $app->redirect($app["url_generator"]->generate($this->bind . '_listar'));
+            $result = $app[$this->service]->findPagination(0, $this->registros_por_pagina);
+            return $app['twig']->render($this->view_list, [
+                        $this->param_view => $result,
+                        'page_atual' => 1,
+                        'Message' => $serviceManager->getMessage(),
+                        'titulo' => $this->titulo,
+                        'pagination' => $app[$this->service]->pagination($request, 1, $this->registros_por_pagina)
+            ]);
         })->bind($this->bind . '_delete');
-
 
         return $this->controller;
     }

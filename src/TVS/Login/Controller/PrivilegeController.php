@@ -16,6 +16,7 @@ class PrivilegeController extends AbstractController {
         $this->view_edit = 'login/default/default_edit.twig';
         $this->view_list = 'login/privilege/privilege.twig';
         $this->form = 'PrivilegeForm';
+        $this->titulo = "Privil&eacute;gios";
     }
 
     public function connect_extra() {
