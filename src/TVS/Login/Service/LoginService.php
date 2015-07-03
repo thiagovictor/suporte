@@ -18,7 +18,10 @@ class LoginService extends AbstractService {
         if ($data["password"] == '') {
             unset($data["password"]);
         }
-        if($data["ativo"]){
+        if (isset($data["image"])) {
+            unset($data["image"]);
+        }
+        if ($data["ativo"]) {
             $data["ativo"] = 1;
             return $data;
         }
@@ -30,4 +33,35 @@ class LoginService extends AbstractService {
         $repo = $this->em->getRepository($this->entity);
         return $repo->findByUsernameAndPassword($username, $password);
     }
+
+    public static function uploadImage(array $files = array(), $username) {
+        $types = ["jpeg"]; //Extensoes validas
+        $completePath = __DIR__ . "/../../views";
+        if (empty($files["tmp_name"]["image"])) {
+            return false;
+        }
+        
+        if (!is_dir("{$completePath}/profile/{$username}")) {
+            mkdir("{$completePath}/profile/{$username}");
+        }
+        foreach ($types as $type) {
+            if (strstr($files["type"]["image"], $type)) {
+                $imagemPath = "/profile/{$username}/{$username}_" . time() . "." . $type;
+                if (move_uploaded_file($files["tmp_name"]["image"], $completePath . $imagemPath)) {
+                    return $imagemPath;
+                }
+                return false;
+            }
+        }
+        return false;
+    }
+
+    publiC static function removeImage($path) {
+        $completePath = __DIR__ . "/../../views";
+        if (unlink($completePath . $path)) {
+            return true;
+        }
+        return false;
+    }
+
 }

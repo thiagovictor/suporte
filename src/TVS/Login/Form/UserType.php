@@ -5,8 +5,9 @@ namespace TVS\Login\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\Validator\Constraints\Email;
-
+ 
 class UserType extends AbstractType {
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
@@ -25,7 +26,9 @@ class UserType extends AbstractType {
                     'label' => 'Ativo?',
                     'required' => false,
                         ]
-        );
+                )->add('image', 'file',[
+                    'constraints' => [new Image(['mimeTypes' => ['image/jpeg', 'image/jpg']])],
+                ]);
     }
 
     public function getName() {

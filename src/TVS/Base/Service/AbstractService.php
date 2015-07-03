@@ -25,7 +25,7 @@ abstract class AbstractService {
         foreach ($data_checked as $metodo => $valor) {
             $metodo = 'set' . ucfirst($metodo);
             if (!method_exists($this->object, $metodo)) {
-                $this->setMessage("N&atilde;o foi poss&iacute;vel converter, verifique os atributos enviados");
+                $this->setMessage("N&atilde;o foi poss&iacute;vel converter, verifique os atributos enviados:{$metodo}");
                 return false;
             }
             $this->object->$metodo($valor);

@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\Image;
 
 class UserEditType extends AbstractType {
 
@@ -25,7 +26,9 @@ class UserEditType extends AbstractType {
                     'label' => 'Ativo?',
                     'required' => false,
                         ]
-        );
+                )->add('image', 'file',[
+                    'constraints' => [new Image(['mimeTypes' => ['image/jpeg', 'image/jpg']])],
+                ]);
     }
 
     public function getName() {

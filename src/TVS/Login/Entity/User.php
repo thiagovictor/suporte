@@ -3,12 +3,12 @@
 namespace TVS\Login\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use TVS\Login\Service\LoginService;
 
 /**
- * User
- * @ORM\Entity
- * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="TVS\Login\Entity\UserRepository")
+ * @ORM\HasLifecycleCallbacks
+ * @ORM\Table(name="user")
  */
 class User {
 
@@ -50,11 +50,39 @@ class User {
     protected $salt;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true) 
+     */
+    private $image;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="ativo", type="boolean", nullable=false)
      */
     protected $ativo;
+
+    /**
+     * @ORM\PrePersist
+     * @ORM\preUpdate
+     */
+    public function uploadImage() {
+        $temp = $this->image;
+        if (!isset($_FILES["UserForm"])) {
+            if (!isset($_FILES["UserFormEdit"])) {
+                return false;
+            }
+            $file = $_FILES["UserFormEdit"];
+        }else{
+            $file = $_FILES["UserForm"];
+        }
+        $result = LoginService::uploadImage($file,  $this->username);
+        if ($result) {
+            $this->image = $result;
+            if (!empty($temp)) {
+                LoginService::removeImage($temp);
+            }
+        }
+    }
 
     public function getId() {
         return $this->id;
