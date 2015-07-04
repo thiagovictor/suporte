@@ -15,7 +15,7 @@ class RouteController extends AbstractController {
         $this->view_new = 'login/default/default_new.twig';
         $this->view_edit = 'login/default/default_edit.twig';
         $this->view_list = 'login/route/route.twig';
-        $this->titulo = "Rotas";
+        $this->titulo = "M&oacute;dulos";
         
     }
 

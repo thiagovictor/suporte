@@ -19,8 +19,8 @@
         <thead>
             <tr>
                 <th>ID</th>
-                <th>TAG</th>
-                <th>ROTA</th>
+                <th>M&Oacute;DULO</th>
+                <th>DESCRI&Ccedil;&Atilde;O</th>
                 <th>MENU</th>
                 <th></th>
             </tr>
@@ -29,9 +29,9 @@
             {% for rota in result %}
                 <tr>
                     <td>{{ rota.id }}</td>
-                    <td>{{ rota.label }}</td>
-                    <td>{{ rota.route }}</td>  
-                    <td>{% if rota.menu.label is defined %}{{ rota.menu.label | raw }}{% endif %}</td> 
+                    <td>{{ rota.route }}</td>
+                    <td>{{ rota.label }}</td>  
+                    <td>{% if rota.menu.label is defined %}{{ rota.menu.label }}{% endif %}</td> 
                     <td>
                         <a href="{{path('route_edit',{'id':rota.id})}}" class="{{class_btn}}" aria-label="Left Align">
                             <span class="{{class_btn_edit}}" aria-hidden="true"></span>

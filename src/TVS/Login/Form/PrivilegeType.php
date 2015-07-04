@@ -41,11 +41,13 @@ class PrivilegeType extends AbstractType {
         $builder->add('user', "choice", array(
             'choices' => $this->users,
             'constraints' => array(new NotBlank()),
+            'label'=>'Usu&aacute;rio',
             'placeholder' => 'Escolha um item',
             'required' => true,
                 )
         )->add('route', "choice", array(
             'choices' => $this->routes,
+            'label'=>'M&oacute;dulo',
             'constraints' => array(new NotBlank()),
             'placeholder' => 'Escolha um item',
             'required' => true,

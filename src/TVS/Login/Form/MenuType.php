@@ -17,7 +17,7 @@ class MenuType extends AbstractType
                             )
                     )->add('desc', "text", array(
                         'constraints' => array(new NotBlank(), new Length(array('max' => 50))),
-                        'label' => 'Descricao',
+                        'label' => 'Descri&ccedil;&atilde;o',
                             )
                     );
                    

@@ -12,7 +12,7 @@ class UserEditType extends AbstractType {
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
         return $builder->add('username', "text", [
-                    'label' => 'Nome',
+                    'label' => 'Usu&aacute;rio',
                     'constraints' => [new NotBlank()],
                         ]
                 )->add('email', "email", [
@@ -27,6 +27,7 @@ class UserEditType extends AbstractType {
                     'required' => false,
                         ]
                 )->add('image', 'file',[
+                    'label' => 'Imagem',
                     'constraints' => [new Image(['mimeTypes' => ['image/jpeg', 'image/jpg']])],
                 ]);
     }
