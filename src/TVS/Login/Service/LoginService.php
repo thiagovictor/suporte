@@ -40,7 +40,11 @@ class LoginService extends AbstractService {
         if (empty($files["tmp_name"]["image"])) {
             return false;
         }
-        
+
+        if (!is_dir("{$completePath}/profile")) {
+            mkdir("{$completePath}/profile");
+        }
+
         if (!is_dir("{$completePath}/profile/{$username}")) {
             mkdir("{$completePath}/profile/{$username}");
         }
