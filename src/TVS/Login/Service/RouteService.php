@@ -15,8 +15,11 @@ class RouteService extends AbstractService {
     }
 
     public function ajustaData(array $data = array()) {
+        if (!empty($data["menu"])) {
+            $repo = $this->em->getRepository("TVS\Login\Entity\Menu");
+            $data["menu"] = $repo->findById($data["menu"]);
+        }
         return $data;
     }
-
 
 }

@@ -27,6 +27,21 @@ class Route {
      */
     private $label;
     
+    /**
+     * @ORM\ManyToOne(targetEntity="Menu", inversedBy="route")
+     * @ORM\JoinColumn(name="menu_id", referencedColumnName="id")
+     **/
+    private $menu;
+    
+    function getMenu() {
+        return $this->menu;
+    }
+
+    function setMenu($menu) {
+        $this->menu = $menu;
+        return $this;
+    }
+    
     function getLabel() {
         return $this->label;
     }
@@ -55,10 +70,15 @@ class Route {
     }
 
     function toArray() {
+        $menu_id = '';
+        if(null !== $this->getMenu()){
+            $menu_id = $this->getMenu()->getId();
+        }
         return [
             'id' => $this->getId(),
             'route' => $this->getRoute(),
-            'label' => $this->getLabel()
+            'label' => $this->getLabel(),
+            'menu' => $menu_id
         ];
     }
 

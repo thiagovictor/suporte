@@ -33,7 +33,7 @@ class Application extends ApplicationSilex {
         };
 
         $app['RouteForm'] = function () use($app) {
-            return $app['form.factory']->createBuilder(new Login\Form\RouteType())->getForm();
+            return $app['form.factory']->createBuilder(new Login\Form\RouteType($app))->getForm();
         };
 
         $app['MenuService'] = function () use($app) {

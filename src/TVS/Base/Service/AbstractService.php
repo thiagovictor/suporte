@@ -201,13 +201,13 @@ abstract class AbstractService {
         $link_prev = '';
         if ($page_atual > 1) {
             $page_prev = $page_atual - 1;
-            $link = "href='/{$route["controller"]}/page/{$page_prev}'";
+            $link_prev = "href='/{$route["controller"]}/page/{$page_prev}'";
         }
 
         $link_next = '';
         if ($page_atual < $numero_paginas) {
-            $page_prev = $page_atual + 1;
-            $link = "href='/{$route["controller"]}/page/{$link_next}'";
+            $page_next = $page_atual + 1;
+            $link_next = "href='/{$route["controller"]}/page/{$page_next}'";
         }
         $return = '<div class="row">
             <div class="col-md-4"></div>
