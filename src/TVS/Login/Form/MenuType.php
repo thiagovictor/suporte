@@ -7,17 +7,17 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Length;
 
-class RouteType extends AbstractType 
+class MenuType extends AbstractType 
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        return $builder->add('route', "text", array(
+        return $builder->add('label', "text", array(
                         'constraints' => array(new NotBlank(), new Length(array('max' => 30))),
-                        'label' => 'Rota',
+                        'label' => 'Menu',
                             )
-                    )->add('label', "text", array(
-                        'constraints' => array(new NotBlank(), new Length(array('max' => 30))),
-                        'label' => 'Tag',
+                    )->add('desc', "text", array(
+                        'constraints' => array(new NotBlank(), new Length(array('max' => 50))),
+                        'label' => 'Descricao',
                             )
                     );
                    
@@ -25,6 +25,6 @@ class RouteType extends AbstractType
 
     public function getName()
     {
-        return 'RouteForm';
+        return 'MenuForm';
     }
 }

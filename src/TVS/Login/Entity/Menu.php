@@ -5,10 +5,10 @@ namespace TVS\Login\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="TVS\Login\Entity\RouteRepository")
- * @ORM\Table(name="route")
+ * @ORM\Entity(repositoryClass="TVS\Login\Entity\MenuRepository")
+ * @ORM\Table(name="menu")
  */
-class Route {
+class Menu {
 
     /**
      * @ORM\Id
@@ -18,30 +18,22 @@ class Route {
     private $id;
 
     /**
-     * @ORM\Column(name="route", type="string", nullable=false) 
+     * @ORM\Column(name="menu", type="string", nullable=false) 
      */
-    private $route;
+    private $desc;
 
     /**
      * @ORM\Column(name="label", type="string", nullable=false) 
      */
     private $label;
     
-    function getLabel() {
-        return $this->label;
-    }
-
-    function setLabel($label) {
-        $this->label = $label;
-        return $this;
-    }
-
     function getId() {
         return $this->id;
     }
 
-    function getRoute() {
-        return $this->route;
+
+    function getLabel() {
+        return $this->label;
     }
 
     function setId($id) {
@@ -49,17 +41,26 @@ class Route {
         return $this;
     }
 
-    function setRoute($route) {
-        $this->route = $route;
+    function setLabel($label) {
+        $this->label = $label;
         return $this;
     }
 
-    function toArray() {
+    function getDesc() {
+        return $this->desc;
+    }
+
+    function setDesc($desc) {
+        $this->desc = $desc;
+        return $this;
+    }
+    
+    public function toArray() {
         return [
             'id' => $this->getId(),
-            'route' => $this->getRoute(),
+            'desc' => $this->getDesc(),
             'label' => $this->getLabel()
         ];
     }
-
+    
 }

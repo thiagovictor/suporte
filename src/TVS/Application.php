@@ -6,6 +6,7 @@ use Silex\Application as ApplicationSilex;
 use TVS\Login\Controller\LoginController;
 use TVS\Login\Controller\RouteController;
 use TVS\Login\Controller\PrivilegeController;
+use TVS\Login\Controller\MenuController;
 use Symfony\Component\HttpFoundation\Request;
 
 class Application extends ApplicationSilex {
@@ -15,34 +16,41 @@ class Application extends ApplicationSilex {
         $app = $this;
 
         $app['LoginService'] = function () use($app) {
-            $loginService = new Login\Service\LoginService($app['EntityManager'], new Login\Entity\User);
-            return $loginService;
+            return new Login\Service\LoginService($app['EntityManager'], new Login\Entity\User);
         };
-        
+
         $app['UserForm'] = function () use($app) {
-            return $app['form.factory']->createBuilder(new Login\Form\UserType())->getForm();   
+            return $app['form.factory']->createBuilder(new Login\Form\UserType())->getForm();
         };
-        
+
         $app['UserFormEdit'] = function () use($app) {
-            return $app['form.factory']->createBuilder(new Login\Form\UserEditType())->getForm();   
+            return $app['form.factory']->createBuilder(new Login\Form\UserEditType())->getForm();
         };
 
         $app['RouteService'] = function () use($app) {
-            $routeService = new Login\Service\RouteService($app['EntityManager'], new Login\Entity\Route);
-            return $routeService;
+            return new Login\Service\RouteService($app['EntityManager'], new Login\Entity\Route());
+            ;
         };
-        
+
         $app['RouteForm'] = function () use($app) {
-            return $app['form.factory']->createBuilder(new Login\Form\RouteType())->getForm();   
+            return $app['form.factory']->createBuilder(new Login\Form\RouteType())->getForm();
         };
-        
+
+        $app['MenuService'] = function () use($app) {
+            return new Login\Service\MenuService($app['EntityManager'], new Login\Entity\Menu());
+        };
+
+        $app['MenuForm'] = function () use($app) {
+            return $app['form.factory']->createBuilder(new Login\Form\MenuType())->getForm();
+        };
+
         $app['PrivilegeService'] = function () use($app) {
             $privileService = new Login\Service\PrivilegeService($app['EntityManager'], new Login\Entity\Privilege);
             return $privileService;
         };
-        
+
         $app['PrivilegeForm'] = function () use($app) {
-            return $app['form.factory']->createBuilder(new Login\Form\PrivilegeType($app))->getForm();   
+            return $app['form.factory']->createBuilder(new Login\Form\PrivilegeType($app))->getForm();
         };
 
         $app->before(function(Request $request) use ($app) {
@@ -80,6 +88,7 @@ class Application extends ApplicationSilex {
 
         $app->mount("/login", new LoginController());
         $app->mount("/routes", new RouteController());
+        $app->mount("/menu", new MenuController());
         $app->mount("/privileges", new PrivilegeController());
     }
 

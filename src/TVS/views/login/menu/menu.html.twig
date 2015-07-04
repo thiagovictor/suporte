@@ -9,7 +9,7 @@
             </div>
         {% endfor%}
     {% endif %}
-    <a type="button" href="{{path('route_new')}}" class="{{class_btn}}" role="button">
+    <a type="button" href="{{path('menu_new')}}" class="{{class_btn}}" role="button">
         <span class="{{class_btn_new}}" aria-hidden="true"></span> Novo
     </a>
 {% endblock %}
@@ -19,22 +19,22 @@
         <thead>
             <tr>
                 <th>ID</th>
-                <th>TAG<th>
-                <th>ROTA</th>
+                <th>MENU<th>
+                <th>DESCRI&Ccedil;&Atilde;O</th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
-            {% for rota in result %}
+            {% for menu in result %}
                 <tr>
-                    <td>{{ rota.id }}</td>
-                    <td>{{ rota.label }}</td>
-                    <td>{{ rota.route }}</td>
+                    <td>{{ menu.id }}</td>
+                    <td>{{ menu.label | raw }}</td>
+                    <td>{{ menu.desc | raw }}</td>
                     <td>
-                        <a href="{{path('route_edit',{'id':rota.id})}}" class="{{class_btn}}" aria-label="Left Align">
+                        <a href="{{path('menu_edit',{'id':menu.id})}}" class="{{class_btn}}" aria-label="Left Align">
                             <span class="{{class_btn_edit}}" aria-hidden="true"></span>
                         </a>
-                        <a href="{{path('route_delete',{'id':rota.id})}}" class="{{class_btn}}" aria-label="Left Align">
+                        <a href="{{path('menu_delete',{'id':menu.id})}}" class="{{class_btn}}" aria-label="Left Align">
                             <span class="{{class_btn_delete}}" aria-hidden="true"></span>
                         </a>
 
