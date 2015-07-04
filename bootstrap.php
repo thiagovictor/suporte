@@ -61,6 +61,10 @@ $app['debug'] = true;
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__ . '/src/TVS/views',
 ));
+$app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
+    $twig->addExtension(new Twig_Extension_Escaper(false));
+    return $twig;
+}));
 
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 $app->register(new Silex\Provider\SessionServiceProvider());
