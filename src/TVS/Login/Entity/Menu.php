@@ -38,7 +38,7 @@ class Menu {
     }
     
     function getRoutes() {
-        return $this->routes;
+        return $this->routes->toArray();
     }
 
     function setRoutes($routes) {
