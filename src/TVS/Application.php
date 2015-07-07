@@ -37,7 +37,7 @@ class Application extends ApplicationSilex {
         };
 
         $app['MenuService'] = function () use($app) {
-            return new Login\Service\MenuService($app['EntityManager'], new Login\Entity\Menu());
+            return new Login\Service\MenuService($app['EntityManager'], new Login\Entity\Menu(), $app);
         };
 
         $app['MenuForm'] = function () use($app) {
@@ -86,10 +86,10 @@ class Application extends ApplicationSilex {
             return $app->redirect('/');
         })->bind('logout');
 
-        $app->mount("/login", new LoginController());
-        $app->mount("/routes", new RouteController());
+        $app->mount("/user", new LoginController());
+        $app->mount("/route", new RouteController());
         $app->mount("/menu", new MenuController());
-        $app->mount("/privileges", new PrivilegeController());
+        $app->mount("/privilege", new PrivilegeController());
     }
 
 }

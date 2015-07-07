@@ -186,6 +186,21 @@ abstract class AbstractService {
         }
         return false;
     }
+    
+    public function isAllowedRoute($user, $route, $action = null) {
+        $routeRepository = $this->em->getRepository('TVS\Login\Entity\Route');
+        $objectRoute = $routeRepository->findOneByRoute($route);
+        $PrivilegeRepositoty = $this->em->getRepository('TVS\Login\Entity\Privilege');
+        $objectPrivilege = $PrivilegeRepositoty->findOneBy(array('user' => $user, 'route' => $objectRoute));
+        if ($objectPrivilege) {
+            if(!$action){
+                return true;
+            }
+            $getAction = 'get' . ucfirst($action);
+            return $objectPrivilege->$getAction();
+        }
+        return false;
+    }
 
     public function pagination($request, $page_atual, $registros_por_pagina) {
         $numero_paginas = ceil($this->getRows() / $registros_por_pagina);

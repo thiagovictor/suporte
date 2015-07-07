@@ -11,7 +11,6 @@ class PrivilegeController extends AbstractController {
         $this->service = 'PrivilegeService';
         $this->bind = 'privilege';
         $this->param_view = 'result';
-        $this->redirect_delete = '/privileges';
         $this->view_new = 'login/default/default_new.twig';
         $this->view_edit = 'login/default/default_edit.twig';
         $this->view_list = 'login/privilege/privilege.twig';

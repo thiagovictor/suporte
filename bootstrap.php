@@ -57,7 +57,6 @@ $app = new TVS\Application([
 ]);
 
 $app['debug'] = true;
-
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__ . '/src/TVS/views',
 ));
@@ -73,3 +72,4 @@ $app->register(new Silex\Provider\ValidatorServiceProvider());
 $app->register(new Silex\Provider\TranslationServiceProvider(), array(
     'translator.domains' => array(),
 ));
+$app->register(new Silex\Provider\HttpFragmentServiceProvider());

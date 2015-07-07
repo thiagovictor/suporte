@@ -32,15 +32,7 @@
                     </div>
                     <div id="navbar" class="navbar-collapse collapse">
                         <ul class="nav navbar-nav">
-                            <li class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Configura&ccedil;&otilde;es<span class="caret"></span></a>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a href="{{ path('user_listar') }}">Usu&aacute;rios</a></li>
-                                    <li><a href="{{ path('route_listar') }}">Rotas</a></li>
-                                    <li><a href="{{ path('privilege_listar') }}">Privil&eacute;gios</a></li>
-                                    <li><a href="{{ path('menu_listar') }}">Ger&ecirc;ncia de menu</a></li>
-                                </ul>
-                            </li>  
+                            {{ render(url('Menu')) }} 
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
 
@@ -60,22 +52,22 @@
 
         {% endblock %}                   
         <div class="container" >
-           <div class="{{class_panel}}">
+            <div class="{{class_panel}}">
                 <div class="panel-heading">
                     <h3 class="panel-title">
-                        {% block tituloPainel %}{% endblock %}
-                    </h3>
-                </div>
-                <div class="panel-body">
-                    {% block superior %}{% endblock %}
-                    <br><br>
-                    {% block conteudo %}{% endblock %}
-                </div>
+                    {% block tituloPainel %}{% endblock %}
+                </h3>
             </div>
-        </div>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-        <script src="/js/bootstrap.min.js"></script>
-        <div class="panel-footer" style="position: absolute; bottom: 0;width: 100%;text-align: center">Copyright (c) 2013 - {{ "now"|date("Y") }} Infosay. Todos os direitos reservados.</div>
-    </body>
+            <div class="panel-body">
+            {% block superior %}{% endblock %}
+            <br><br>
+        {% block conteudo %}{% endblock %}
+    </div>
+</div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<div class="panel-footer" style="position: absolute; bottom: 0;width: 100%;text-align: center">Copyright (c) 2013 - {{ "now"|date("Y") }} Infosay. Todos os direitos reservados.</div>
+</body>
 </html>
 
