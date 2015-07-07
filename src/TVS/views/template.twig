@@ -32,19 +32,10 @@
                     </div>
                     <div id="navbar" class="navbar-collapse collapse">
                         <ul class="nav navbar-nav">
-                            {{ render(url('Menu')) }} 
+                            {{ render(url('DinamicMenu')) }} 
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
-
-                            <li class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Thiago Santos<span class="caret"></span></a>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a href="#">Prefer&ecirc;ncias</a></li>
-                                    <li><a href="#">Alterar senha</a></li>
-                                    <li><a href="{{ path('logout') }}">Sair</a></li>
-                                </ul>
-                            </li> 
-                            <li><img  src="../../img/eu.jpg" style="width: 40px; height: 40px;margin-top: 5px;" class="img-circle" alt=""></li>
+                            {{ render(url('PreferenceMenu')) }} 
                         </ul>
                     </div>
                 </div>

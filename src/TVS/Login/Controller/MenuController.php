@@ -3,7 +3,7 @@
 namespace TVS\Login\Controller;
 
 use TVS\Base\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
+use TVS\Base\Lib\RepositoryFile;
 
 class MenuController extends AbstractController {
 
@@ -22,12 +22,18 @@ class MenuController extends AbstractController {
 
     public function connect_extra() {
         $app = $this->app;
-        $this->controller->get('/display', function (Request $request) use ($app) {
+        $this->controller->get('/display/dinamicmenu', function () use ($app) {
             $result = $app[$this->service]->getMenu();
-            return $app['twig']->render('login/menu/template.html.twig', [
+            return $app['twig']->render('login/menu/dinamic_menu.html.twig', [
                         'result' => $result,
                     ]);
-        })->bind('Menu');
+        })->bind('DinamicMenu');
+
+        $this->controller->get('/display/preferencemenu', function () use ($app) {
+            return $app['twig']->render('login/menu/preference_menu.html.twig', [
+                        'user' => $app['session']->get('user')
+                    ]);
+        })->bind('PreferenceMenu');
     }
 
 }
