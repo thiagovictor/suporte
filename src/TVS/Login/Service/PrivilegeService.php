@@ -5,11 +5,12 @@ namespace TVS\Login\Service;
 use Doctrine\ORM\EntityManager;
 use TVS\Login\Entity\Privilege;
 use TVS\Base\Service\AbstractService;
+use TVS\Application;
 
 class PrivilegeService extends AbstractService {
 
-    public function __construct(EntityManager $em, Privilege $privilege) {
-        parent::__construct($em);
+    public function __construct(EntityManager $em, Privilege $privilege, Application $app) {
+        parent::__construct($em,$app);
         $this->object = $privilege;
         $this->entity = "TVS\Login\Entity\Privilege";
     }

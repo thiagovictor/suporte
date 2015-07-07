@@ -16,7 +16,7 @@ class Application extends ApplicationSilex {
         $app = $this;
 
         $app['LoginService'] = function () use($app) {
-            return new Login\Service\LoginService($app['EntityManager'], new Login\Entity\User);
+            return new Login\Service\LoginService($app['EntityManager'], new Login\Entity\User, $app);
         };
 
         $app['UserForm'] = function () use($app) {
@@ -28,7 +28,7 @@ class Application extends ApplicationSilex {
         };
 
         $app['RouteService'] = function () use($app) {
-            return new Login\Service\RouteService($app['EntityManager'], new Login\Entity\Route());
+            return new Login\Service\RouteService($app['EntityManager'], new Login\Entity\Route(), $app);
             ;
         };
 
@@ -45,7 +45,7 @@ class Application extends ApplicationSilex {
         };
 
         $app['PrivilegeService'] = function () use($app) {
-            $privileService = new Login\Service\PrivilegeService($app['EntityManager'], new Login\Entity\Privilege);
+            $privileService = new Login\Service\PrivilegeService($app['EntityManager'], new Login\Entity\Privilege(), $app);
             return $privileService;
         };
 
@@ -58,7 +58,7 @@ class Application extends ApplicationSilex {
                 if (!$app['session']->get('user')) {
                     return $app->redirect('/');
                 }
-                if (!$app['PrivilegeService']->isAllowed($app['session']->get('user'), $request)) {
+                if (!$app['PrivilegeService']->isAllowed()) {
                     $app['session']->set('error', "Acesso Negado! Permiss&otilde;es insuficientes.");
                     return $app->redirect('/');
                 }

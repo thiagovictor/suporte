@@ -4,6 +4,7 @@ namespace TVS\Base\Service;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
+use TVS\Application;
 
 abstract class AbstractService {
 
@@ -11,9 +12,11 @@ abstract class AbstractService {
     protected $message = array();
     protected $object;
     protected $entity;
+    protected $app;
 
-    public function __construct(EntityManager $em) {
+    public function __construct(EntityManager $em, Application $app) {
         $this->em = $em;
+        $this->app = $app;
     }
 
     public function ajustaData(array $data = array()) {
@@ -149,7 +152,8 @@ abstract class AbstractService {
         return $this;
     }
 
-    public function mountArrayRoute($request) {
+    public function mountArrayRoute() {
+        $request = $this->app['request'];
         $rotas = ['controller', 'action', 'param'];
         $route = [];
         $params = explode("/", substr($request->getRequestUri(), 1, strlen($request->getRequestUri())));
@@ -166,8 +170,9 @@ abstract class AbstractService {
         return $route;
     }
 
-    public function isAllowed($user, $request, $objectToArray = false) {
-        $route = $this->mountArrayRoute($request);
+    public function isAllowed($objectToArray = false) {
+        $user = $this->app['session']->get('user');
+        $route = $this->mountArrayRoute();
         $routeRepository = $this->em->getRepository('TVS\Login\Entity\Route');
         $objectRoute = $routeRepository->findOneByRoute($route['controller']);
         $PrivilegeRepositoty = $this->em->getRepository('TVS\Login\Entity\Privilege');
@@ -187,11 +192,11 @@ abstract class AbstractService {
         return false;
     }
     
-    public function isAllowedRoute($user, $route, $action = null) {
+    public function isAllowedRoute($route, $action = null) {
         $routeRepository = $this->em->getRepository('TVS\Login\Entity\Route');
         $objectRoute = $routeRepository->findOneByRoute($route);
         $PrivilegeRepositoty = $this->em->getRepository('TVS\Login\Entity\Privilege');
-        $objectPrivilege = $PrivilegeRepositoty->findOneBy(array('user' => $user, 'route' => $objectRoute));
+        $objectPrivilege = $PrivilegeRepositoty->findOneBy(array('user' => $this->app['session']->get('user'), 'route' => $objectRoute));
         if ($objectPrivilege) {
             if(!$action){
                 return true;
@@ -202,9 +207,9 @@ abstract class AbstractService {
         return false;
     }
 
-    public function pagination($request, $page_atual, $registros_por_pagina) {
+    public function pagination($page_atual, $registros_por_pagina) {
         $numero_paginas = ceil($this->getRows() / $registros_por_pagina);
-        $route = $this->mountArrayRoute($request);
+        $route = $this->mountArrayRoute();
         $disabled_prev = '';
         if ($page_atual == 1) {
             $disabled_prev = 'disabled';

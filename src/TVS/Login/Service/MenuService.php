@@ -9,13 +9,10 @@ use TVS\Application;
 
 class MenuService extends AbstractService {
 
-    private $app;
-
     public function __construct(EntityManager $em, Menu $menu, Application $app) {
-        parent::__construct($em);
+        parent::__construct($em,$app);
         $this->object = $menu;
         $this->entity = "TVS\Login\Entity\Menu";
-        $this->app = $app;
     }
 
     public function ajustaData(array $data = array()) {
@@ -34,7 +31,10 @@ class MenuService extends AbstractService {
         if ($objectPrivilege) {
             $objectsMenu = $menuRepositoty->findBy([], ['label' => 'ASC']);
             foreach ($objectsMenu as $menu) {
-                $barramenu[$menu->getLabel()] = $menu->getRoutes();
+                $itensArray = $menu->getRoutes();
+                if(!empty($itensArray)){
+                    $barramenu[$menu->getLabel()] = $itensArray;
+                }
             }
             return $barramenu;
         }
@@ -49,7 +49,10 @@ class MenuService extends AbstractService {
                         $itensArray[] = $item;
                     }
                 }
-                $barramenu[$menu->getLabel()] = $itensArray;
+                if(!empty($itensArray)){
+                    $barramenu[$menu->getLabel()] = $itensArray;
+                }
+                
             }
             return $barramenu;
         }

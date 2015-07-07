@@ -5,11 +5,12 @@ namespace TVS\Login\Service;
 use Doctrine\ORM\EntityManager;
 use TVS\Login\Entity\User;
 use TVS\Base\Service\AbstractService;
+use TVS\Application;
 
 class LoginService extends AbstractService {
 
-    public function __construct(EntityManager $em, User $user) {
-        parent::__construct($em);
+    public function __construct(EntityManager $em, User $user, Application $app) {
+        parent::__construct($em, $app);
         $this->object = $user;
         $this->entity = "TVS\Login\Entity\User";
     }
