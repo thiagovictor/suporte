@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use TVS\Login\Entity\User;
 use TVS\Base\Service\AbstractService;
 use TVS\Application;
+use TVS\Base\Lib\ResizeImage;
 
 class LoginService extends AbstractService {
 
@@ -53,9 +54,23 @@ class LoginService extends AbstractService {
         foreach ($types as $type) {
             if (strstr($files["type"]["image"], $type)) {
                 $imagemPath = "/profile/{$username}/{$username}_" . time() . "." . $type;
-                if (move_uploaded_file($files["tmp_name"]["image"], $completePath . $imagemPath)) {
+                
+                //----------------------------------------------------------------------------
+                //UTILIZANDO RESIZE//
+                $image = new ResizeImage();
+                $image->setAttribute('DEFAULT_WIDTH', 100);
+                $image->setAttribute('DEFAULT_HEIGHT', 100);
+                $image->setAttribute('LOCAL_IMAGE', $files["tmp_name"]["image"]);
+                $image->setAttribute('LOCAL_NEW_IMAGE', $completePath . $imagemPath);
+                if ($image->processImageAndWriteToCache()) {
                     return $imagemPath;
                 }
+                //----------------------------------------------------------------------------
+                // NÃO UTILIZANDO RESIZE//
+                    //if (move_uploaded_file($files["tmp_name"]["image"], $completePath . $imagemPath)) {
+                         //return $imagemPath;
+                    //}
+                //----------------------------------------------------------------------------
                 return false;
             }
         }

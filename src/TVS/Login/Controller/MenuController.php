@@ -36,8 +36,8 @@ class MenuController extends AbstractController {
             ]);
         })->bind('PreferenceMenu');
 
-        $this->controller->get('/display/preferenceimage', function () use ($app) {
-            $user = $app['LoginService']->find($app['session']->get('user')->getId());
+        $this->controller->get('/display/preferenceimage/{id}', function ($id) use ($app) {
+            $user = $app['LoginService']->find($id);
             return new Response(
                     (new RepositoryFile("../data".$user->getImage()))->getArquivo(), 200, array(
                         'Content-Type' => 'image/jpg',
