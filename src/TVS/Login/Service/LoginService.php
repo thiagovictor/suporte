@@ -37,7 +37,8 @@ class LoginService extends AbstractService {
 
     public static function uploadImage(array $files = array(), $username) {
         $types = ["jpeg"]; //Extensoes validas
-        $completePath = __DIR__ . "/../../views";
+        $completePath = __DIR__ . "/../../../../data";
+
         if (empty($files["tmp_name"]["image"])) {
             return false;
         }
@@ -62,7 +63,7 @@ class LoginService extends AbstractService {
     }
 
     publiC static function removeImage($path) {
-        $completePath = __DIR__ . "/../../views";
+        $completePath = __DIR__ . "/../../../../data";
         if (unlink($completePath . $path)) {
             return true;
         }

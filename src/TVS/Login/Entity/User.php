@@ -83,7 +83,11 @@ class User {
             }
         }
     }
-
+    
+    function getImage() {
+        return $this->image;
+    }
+    
     public function getId() {
         return $this->id;
     }
