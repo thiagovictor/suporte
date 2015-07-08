@@ -28,6 +28,7 @@ class UserType extends AbstractType {
                         ]
                 )->add('image', 'file',[
                     'label'=>'Imagem',
+                    'required' => false,
                     'constraints' => [new Image(['mimeTypes' => ['image/jpeg', 'image/jpg']])],
                 ]);
     }

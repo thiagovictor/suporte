@@ -24,7 +24,6 @@ class MenuController extends AbstractController {
         $app = $this->app;
         $this->controller->get('/display/dinamicmenu', function () use ($app) {
             $result = $app[$this->service]->getMenu();
-
             return $app['twig']->render('login/menu/dinamic_menu.html.twig', [
                         'result' => $result,
             ]);

@@ -5,7 +5,7 @@
             <ul class="dropdown-menu" role="menu">
                 {%for item in menu %}
                     <li><a href="{{ path(item.route~'_listar') }}">{{item.label}}</a></li>
-                    {% endfor %}
+                {% endfor %}
             </ul>
         </li> 
     {% endfor %}

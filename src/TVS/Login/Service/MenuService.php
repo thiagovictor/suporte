@@ -45,7 +45,7 @@ class MenuService extends AbstractService {
                 $itens = $menu->getRoutes();
                 $itensArray = array();
                 foreach ($itens as $item) {
-                    if ($this->isAllowedRoute($user, $item->getRoute())) {
+                    if ($this->isAllowedRoute($item->getRoute())) {
                         $itensArray[] = $item;
                     }
                 }
