@@ -6,6 +6,7 @@ use Silex\Application as ApplicationSilex;
 use TVS\Login\Controller\LoginController;
 use TVS\Login\Controller\RouteController;
 use TVS\Login\Controller\PrivilegeController;
+use TVS\Login\Controller\ProfileController;
 use TVS\Login\Controller\MenuController;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -16,7 +17,7 @@ class Application extends ApplicationSilex {
         $app = $this;
 
         $app['LoginService'] = function () use($app) {
-            return new Login\Service\LoginService($app['EntityManager'], new Login\Entity\User, $app);
+            return new Login\Service\LoginService($app['EntityManager'], new Login\Entity\User(), $app);
         };
 
         $app['UserForm'] = function () use($app) {
@@ -51,6 +52,10 @@ class Application extends ApplicationSilex {
 
         $app['PrivilegeForm'] = function () use($app) {
             return $app['form.factory']->createBuilder(new Login\Form\PrivilegeType($app))->getForm();
+        };
+        
+        $app['ProfileForm'] = function () use($app) {
+            return $app['form.factory']->createBuilder(new Login\Form\ProfileType())->getForm();
         };
 
         $app->before(function(Request $request) use ($app) {
@@ -90,6 +95,7 @@ class Application extends ApplicationSilex {
         $app->mount("/route", new RouteController());
         $app->mount("/menu", new MenuController());
         $app->mount("/privilege", new PrivilegeController());
+        $app->mount("/profile", new ProfileController());
     }
 
 }

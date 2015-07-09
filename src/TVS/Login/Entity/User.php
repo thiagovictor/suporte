@@ -67,13 +67,16 @@ class User {
      */
     public function uploadImage() {
         $temp = $this->image;
-        if (!isset($_FILES["UserForm"])) {
-            if (!isset($_FILES["UserFormEdit"])) {
-                return false;
+        $forms = ["UserForm","UserFormEdit","ProfileForm"];
+        $file = null;
+        foreach ($forms as $value) {
+            if (!isset($_FILES[$value])) {
+                continue;
             }
-            $file = $_FILES["UserFormEdit"];
-        }else{
-            $file = $_FILES["UserForm"];
+            $file = $_FILES[$value];
+        }
+        if(!$file){
+            return false;
         }
         $result = LoginService::uploadImage($file,  $this->username);
         if ($result) {

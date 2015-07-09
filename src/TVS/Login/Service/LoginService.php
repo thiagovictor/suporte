@@ -23,6 +23,10 @@ class LoginService extends AbstractService {
         
         unset($data["image"]);
         
+        if(!isset($data["ativo"])){
+            return $data;
+        }
+        
         if ($data["ativo"]) {
             $data["ativo"] = 1;
             return $data;
