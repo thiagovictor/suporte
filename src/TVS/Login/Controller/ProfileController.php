@@ -4,6 +4,8 @@ namespace TVS\Login\Controller;
 
 use Silex\ControllerProviderInterface;
 use Silex\Application;
+use TVS\Base\Lib\RepositoryFile;
+use Symfony\Component\HttpFoundation\Response;
 
 class ProfileController implements ControllerProviderInterface {
 
@@ -61,6 +63,16 @@ class ProfileController implements ControllerProviderInterface {
                         "route" => $serviceManager->mountArrayRoute()
             ]);
         })->bind($this->bind . '_edit');
+        
+        $this->controller->get('/display/preferenceimage/{id}', function ($id) use ($app) {
+            $user = $app['LoginService']->find($id);
+            return new Response(
+                    (new RepositoryFile("../data".$user->getImage()))->getArquivo(), 200, array(
+                        'Content-Type' => 'image/jpg',
+                        'Content-Disposition' => 'filename="image.jpg"'
+                    )
+            );   
+        })->bind('PreferenceImage');
 
 
         return $this->controller;

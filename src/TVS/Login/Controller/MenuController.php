@@ -3,8 +3,6 @@
 namespace TVS\Login\Controller;
 
 use TVS\Base\Controller\AbstractController;
-use TVS\Base\Lib\RepositoryFile;
-use Symfony\Component\HttpFoundation\Response;
 
 class MenuController extends AbstractController {
 
@@ -34,16 +32,6 @@ class MenuController extends AbstractController {
                         'user' => $app['session']->get('user'),
             ]);
         })->bind('PreferenceMenu');
-
-        $this->controller->get('/display/preferenceimage/{id}', function ($id) use ($app) {
-            $user = $app['LoginService']->find($id);
-            return new Response(
-                    (new RepositoryFile("../data".$user->getImage()))->getArquivo(), 200, array(
-                        'Content-Type' => 'image/jpg',
-                        'Content-Disposition' => 'filename="image.jpg"'
-                    )
-            );   
-        })->bind('PreferenceImage');
     }
 
 }

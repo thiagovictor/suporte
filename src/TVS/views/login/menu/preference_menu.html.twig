@@ -6,5 +6,5 @@
                 <li><a href="{{ path('logout') }}">Sair</a></li>
             </ul>
         </li> 
-        <li><img  src="/menu/display/preferenceimage/{{user.id}}" style="width: 40px; height: 40px;margin-top: 5px;" class="img-circle" alt=""></li>
+        <li><img  src="{{path('PreferenceImage', {id: user.id}) }}" style="width: 40px; height: 40px;margin-top: 5px;" class="img-circle" alt=""></li>
 
