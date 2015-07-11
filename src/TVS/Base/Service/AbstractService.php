@@ -192,12 +192,28 @@ abstract class AbstractService {
         return false;
     }
     
+    public function ObjectValidPrivilege(\TVS\Login\Entity\Privilege $privilege) {
+        $acoes = ['display','new','edit','delete'];
+        $return = false;
+        foreach ($acoes as $acao) {
+            $action = 'get'.ucfirst($acao);
+            if($privilege->$action()){
+                $return = true;
+            }
+        }
+        return $return;
+    }
+    
+    
     public function isAllowedRoute($route, $action = null) {
         $routeRepository = $this->em->getRepository('TVS\Login\Entity\Route');
         $objectRoute = $routeRepository->findOneByRoute($route);
         $PrivilegeRepositoty = $this->em->getRepository('TVS\Login\Entity\Privilege');
         $objectPrivilege = $PrivilegeRepositoty->findOneBy(array('user' => $this->app['session']->get('user'), 'route' => $objectRoute));
         if ($objectPrivilege) {
+            if(!$this->ObjectValidPrivilege($objectPrivilege)){
+                return false;
+            }
             if(!$action){
                 return true;
             }
