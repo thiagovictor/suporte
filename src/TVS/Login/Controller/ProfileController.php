@@ -28,7 +28,7 @@ class ProfileController implements ControllerProviderInterface {
         $this->bind = 'profile';
         $this->param_view = 'result';
         $this->view_new = 'login/default/default_new.twig';
-        $this->view_edit = 'login/default/default_edit.twig';
+        $this->view_edit = 'login/profile/profile_edit.twig';
         $this->view_list = 'template.twig';
         $this->form = 'ProfileForm';
         $this->titulo = "Perfil do usu&aacute;rio";
