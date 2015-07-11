@@ -66,8 +66,12 @@ class ProfileController implements ControllerProviderInterface {
         
         $this->controller->get('/display/preferenceimage/{id}', function ($id) use ($app) {
             $user = $app['LoginService']->find($id);
+            $image  = $user->getImage();
+            if(!$user->getImage()){
+                $image = '/default.jpg';
+            }
             return new Response(
-                    (new RepositoryFile("../data".$user->getImage()))->getArquivo(), 200, array(
+                    (new RepositoryFile("../data".$image))->getArquivo(), 200, array(
                         'Content-Type' => 'image/jpg',
                         'Content-Disposition' => 'filename="image.jpg"'
                     )
