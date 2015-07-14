@@ -123,5 +123,15 @@ class Privilege {
             'delete' => $this->getDelete()
         ];
     }
+    
+    public function getPermission() {
+        return [
+            'id'=>  $this->getId(),
+            'display' => $this->getDisplay(),
+            'new' => $this->getNew(),
+            'edit' => $this->getEdit(),
+            'delete' => $this->getDelete()
+        ];
+    }
 
 }

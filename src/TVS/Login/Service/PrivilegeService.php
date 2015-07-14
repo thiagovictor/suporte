@@ -10,7 +10,7 @@ use TVS\Application;
 class PrivilegeService extends AbstractService {
 
     public function __construct(EntityManager $em, Privilege $privilege, Application $app) {
-        parent::__construct($em,$app);
+        parent::__construct($em, $app);
         $this->object = $privilege;
         $this->entity = "TVS\Login\Entity\Privilege";
     }
@@ -35,6 +35,36 @@ class PrivilegeService extends AbstractService {
             $data[$value] = 0;
         }
         return $data;
+    }
+
+    public function privilegeMap($id = null) {
+        $rotas = $this->app["RouteService"]->findAll();
+        $user = $this->app["LoginService"]->find($id);
+        $map = array();
+        if (!$user) {
+            return $map;
+        }
+        foreach ($rotas as $rota) {
+            $map[$rota->getRoute()] = $this->getPrivilege($rota, $user);
+        }
+
+
+        return $map;
+    }
+
+    public function getPrivilege(\TVS\Login\Entity\Route $rota, $user) {
+        $privilegeRepositoty = $this->em->getRepository('TVS\Login\Entity\Privilege');
+        $privilege = $privilegeRepositoty->findOneBy(array('user' => $user, 'route' => $rota));
+        if (!$privilege) {
+            return [
+                'id'=>$rota->getId(),
+                'display' => false,
+                'new' => false,
+                'edit' => false,
+                'delete' => false
+            ];
+        }
+        return $privilege->getPermission();
     }
 
 }

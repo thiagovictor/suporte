@@ -19,7 +19,18 @@ class PrivilegeController extends AbstractController {
     }
 
     public function connect_extra() {
-        
+        $app = $this->app;
+        $this->controller->get('/edit/showall/{id}', function ($id) use ($app) {
+            $serviceManager = $app[$this->service];
+//            var_dump($serviceManager->privilegeMap($id));
+//            exit();
+
+            return $app['twig']->render('login/privilege/showall.twig', [
+                'result' => $serviceManager->privilegeMap($id),
+                'Message' => $serviceManager->getMessage(),
+                'titulo' => $this->titulo,
+            ]);
+        });
     }
 
 }
