@@ -126,7 +126,7 @@ class Privilege {
     
     public function getPermission() {
         return [
-            'id'=>  $this->getId(),
+            'id'=>  $this->getRoute()->getId(),
             'display' => $this->getDisplay(),
             'new' => $this->getNew(),
             'edit' => $this->getEdit(),

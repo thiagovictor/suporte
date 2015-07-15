@@ -47,17 +47,14 @@ class PrivilegeService extends AbstractService {
         foreach ($rotas as $rota) {
             $map[$rota->getRoute()] = $this->getPrivilege($rota, $user);
         }
-
-
         return $map;
     }
 
     public function getPrivilege(\TVS\Login\Entity\Route $rota, $user) {
-        $privilegeRepositoty = $this->em->getRepository('TVS\Login\Entity\Privilege');
-        $privilege = $privilegeRepositoty->findOneBy(array('user' => $user, 'route' => $rota));
+        $privilege = $this->findOneBy(array('user' => $user, 'route' => $rota));
         if (!$privilege) {
             return [
-                'id'=>$rota->getId(),
+                'id' => $rota->getId(),
                 'display' => false,
                 'new' => false,
                 'edit' => false,
@@ -65,6 +62,38 @@ class PrivilegeService extends AbstractService {
             ];
         }
         return $privilege->getPermission();
+    }
+
+    public function UpdateAll(array $array) {
+        $app = $this->app;
+        $user = $app['LoginService']->find($array['id']);
+        unset($array['id']);
+        $id_temp = 0;
+        $privilege = null;
+        foreach ($array as $key => $value) {
+            $arg = explode('_', $key);
+            if ($id_temp != $arg[0]) {
+                $route = $app['RouteService']->find($arg[0]);
+                $privilege[$arg[0]] = $app['PrivilegeService']->findOneBy(array('user' => $user, 'route' => $route));
+                if (!$privilege[$arg[0]]) {
+                    $privilege[$arg[0]] = new Privilege();
+                    $privilege[$arg[0]]->setUser($user);
+                    $privilege[$arg[0]]->setRoute($route);
+                }
+                $privilege[$arg[0]]->setDisplay(false);
+                $privilege[$arg[0]]->setNew(false);
+                $privilege[$arg[0]]->setEdit(false);
+                $privilege[$arg[0]]->setDelete(false);
+            }
+            $id_temp = $arg[0];
+            $action = 'set' . ucfirst($arg[1]);
+            $privilege[$arg[0]]->$action(true);
+        }
+        foreach ($privilege as $object) {
+            $this->em->persist($object);
+        }
+        $this->em->flush();
+        $this->setMessage("Registro atualizado com sucesso!");
     }
 
 }

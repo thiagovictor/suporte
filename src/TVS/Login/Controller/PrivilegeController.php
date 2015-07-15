@@ -3,6 +3,7 @@
 namespace TVS\Login\Controller;
 
 use TVS\Base\Controller\AbstractController;
+use TVS\Login\Entity\Privilege;
 
 class PrivilegeController extends AbstractController {
 
@@ -22,15 +23,24 @@ class PrivilegeController extends AbstractController {
         $app = $this->app;
         $this->controller->get('/edit/showall/{id}', function ($id) use ($app) {
             $serviceManager = $app[$this->service];
-//            var_dump($serviceManager->privilegeMap($id));
-//            exit();
-
             return $app['twig']->render('login/privilege/showall.twig', [
-                'result' => $serviceManager->privilegeMap($id),
-                'Message' => $serviceManager->getMessage(),
-                'titulo' => $this->titulo,
+                        'id' => $id,
+                        'result' => $serviceManager->privilegeMap($id),
+                        'Message' => $serviceManager->getMessage(),
+                        'titulo' => $this->titulo,
             ]);
-        });
+        })->bind('editPrivilegeAllUser');
+
+        $this->controller->post('/edit/updateAll', function () use ($app) {
+            $serviceManager = $app[$this->service];
+            $serviceManager->UpdateAll($_POST);
+            return $app['twig']->render('login/privilege/showall.twig', [
+                        'id' => $_POST['id'],
+                        'result' => $serviceManager->privilegeMap($_POST['id']),
+                        'Message' => $serviceManager->getMessage(),
+                        'titulo' => $this->titulo,
+            ]);
+        })->bind('updateAllPrivilege');
     }
 
 }

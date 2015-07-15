@@ -142,6 +142,15 @@ abstract class AbstractService {
         $repo = $this->em->getRepository($this->entity);
         return $repo->find($id);
     }
+    
+    public function findOneBy(array $param) {
+        $repo = $this->em->getRepository($this->entity);
+        $object = $repo->findOneBy($param);
+        if ($object) {
+            return $object;
+        }
+        return false;
+    }
 
     function getMessage() {
         return $this->message;
