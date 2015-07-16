@@ -63,16 +63,32 @@ class PrivilegeService extends AbstractService {
         }
         return $privilege->getPermission();
     }
-
+    
+    public function removePrivileges($notRemove, $user) {
+        $privileges = $this->app['PrivilegeService']->findBy(array('user' => $user));
+        if(!$privileges){
+            return false;
+        }
+        
+        foreach ($privileges as $privilege) {
+            if(array_search($privilege->getRoute()->getId(), $notRemove)=== false){
+                $this->delete($privilege->getId());
+            }
+        }
+        $this->em->flush();
+    }
+    
     public function UpdateAll(array $array) {
         $app = $this->app;
         $user = $app['LoginService']->find($array['id']);
         unset($array['id']);
         $id_temp = 0;
+        $chaves = array();
         $privilege = null;
         foreach ($array as $key => $value) {
             $arg = explode('_', $key);
             if ($id_temp != $arg[0]) {
+                $chaves[] = $arg[0]; 
                 $route = $app['RouteService']->find($arg[0]);
                 $privilege[$arg[0]] = $app['PrivilegeService']->findOneBy(array('user' => $user, 'route' => $route));
                 if (!$privilege[$arg[0]]) {
@@ -89,6 +105,8 @@ class PrivilegeService extends AbstractService {
             $action = 'set' . ucfirst($arg[1]);
             $privilege[$arg[0]]->$action(true);
         }
+        
+        $this->removePrivileges($chaves,$user);
         foreach ($privilege as $object) {
             $this->em->persist($object);
         }

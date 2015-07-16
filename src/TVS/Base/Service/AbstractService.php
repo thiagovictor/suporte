@@ -151,7 +151,16 @@ abstract class AbstractService {
         }
         return false;
     }
-
+    
+    public function findBy(array $param) {
+        $repo = $this->em->getRepository($this->entity);
+        $object = $repo->findBy($param);
+        if ($object) {
+            return $object;
+        }
+        return false;
+    }
+    
     function getMessage() {
         return $this->message;
     }
