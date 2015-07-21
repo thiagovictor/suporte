@@ -7,6 +7,7 @@ use TVS\Login\Controller\LoginController;
 use TVS\Login\Controller\RouteController;
 use TVS\Login\Controller\PrivilegeController;
 use TVS\Login\Controller\ProfileController;
+use TVS\Login\Controller\ConfigController;
 use TVS\Login\Controller\MenuController;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -57,6 +58,14 @@ class Application extends ApplicationSilex {
         $app['ProfileForm'] = function () use($app) {
             return $app['form.factory']->createBuilder(new Login\Form\ProfileType())->getForm();
         };
+        
+        $app['ConfigService'] = function () use($app) {
+            return new Login\Service\ConfigService($app['EntityManager'], new Login\Entity\Config(), $app);
+        };
+
+        $app['ConfigForm'] = function () use($app) {
+            return $app['form.factory']->createBuilder(new Login\Form\ConfigType())->getForm();
+        };
 
         $app->before(function(Request $request) use ($app) {
             if (!$request->get('non_require_authentication')) {
@@ -96,6 +105,7 @@ class Application extends ApplicationSilex {
         $app->mount("/menu", new MenuController());
         $app->mount("/privilege", new PrivilegeController());
         $app->mount("/profile", new ProfileController());
+        $app->mount("/config", new ConfigController());
     }
 
 }

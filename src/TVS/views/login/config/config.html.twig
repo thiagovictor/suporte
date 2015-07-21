@@ -1,0 +1,47 @@
+{% extends "template.twig" %}
+{% block tituloPainel %}{{ titulo | raw }}{% endblock %}
+{% block superior %}
+    {% if Message is defined %}
+        {% for mens in Message %}
+            <div class="alert alert-info alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <ul>{{ mens | raw }}</ul>
+            </div>
+        {% endfor%}
+    {% endif %}
+    <a type="button" href="{{path('config_new')}}" class="{{class_btn}}" role="button">
+        <span class="{{class_btn_new}}" aria-hidden="true"></span> Novo
+    </a>
+{% endblock %}
+
+{% block conteudo %}
+    <table class="{{class_table}}">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for rota in result %}
+                <tr>
+                    <td>{{ rota.id }}</td>
+                    <td>{{ rota.nome }}</td>
+                    <td>
+                        <a href="{{path('config_edit',{'id':rota.id})}}" class="{{class_btn}}" aria-label="Left Align">
+                            <span class="{{class_btn_edit}}" aria-hidden="true"></span>
+                        </a>
+                        <a href="{{path('config_delete',{'id':rota.id})}}" class="{{class_btn}}" aria-label="Left Align">
+                            <span class="{{class_btn_delete}}" aria-hidden="true"></span>
+                        </a>
+
+                    </td>
+                </tr>   
+            {% endfor %}
+        </tbody>
+    </table>
+    {{ pagination|raw}}
+
+
+{% endblock %}
