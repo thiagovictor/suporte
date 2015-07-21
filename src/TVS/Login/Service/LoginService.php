@@ -20,13 +20,13 @@ class LoginService extends AbstractService {
         if ($data["password"] == '') {
             unset($data["password"]);
         }
-        
+
         unset($data["image"]);
-        
-        if(!isset($data["ativo"])){
+
+        if (!isset($data["ativo"])) {
             return $data;
         }
-        
+
         if ($data["ativo"]) {
             $data["ativo"] = 1;
             return $data;
@@ -35,8 +35,38 @@ class LoginService extends AbstractService {
         return $data;
     }
 
+    public function ldap($ldap_server, $auth_user, $auth_pass) {
+        if (!($connect = ldap_connect($ldap_server))) {
+            return false;
+        }
+        if (!($bind = ldap_bind($connect, $auth_user, $auth_pass))) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    
+    public function ConfigAD() {
+        $serviceConfig = $this->app['ConfigService'];
+        $config = $serviceConfig->findConfig('ActiveDirectory');
+        if (!$config) {
+            return false;
+        }
+        if (!$config->getParametro('ativo')) {
+            return false;
+        }
+        return $config;
+    }
+
     public function findByUsernameAndPassword($username, $password) {
         $repo = $this->em->getRepository($this->entity);
+        $config = $this->ConfigAD();
+        if ($config) {
+            if (!$this->ldap($config->getParametro('servidor'), "{$username}@{$config->getParametro('dominio')}", $password)){
+                return false;
+            }
+            return $repo->findByUsername($username);
+        }
         return $repo->findByUsernameAndPassword($username, $password);
     }
 
@@ -58,7 +88,7 @@ class LoginService extends AbstractService {
         foreach ($types as $type) {
             if (strstr($files["type"]["image"], $type)) {
                 $imagemPath = "/profile/{$username}/{$username}_" . time() . "." . $type;
-                
+
                 //----------------------------------------------------------------------------
                 //UTILIZANDO RESIZE//
                 $image = new ResizeImage();
@@ -71,9 +101,9 @@ class LoginService extends AbstractService {
                 }
                 //----------------------------------------------------------------------------
                 // NÃO UTILIZANDO RESIZE//
-                    //if (move_uploaded_file($files["tmp_name"]["image"], $completePath . $imagemPath)) {
-                         //return $imagemPath;
-                    //}
+                //if (move_uploaded_file($files["tmp_name"]["image"], $completePath . $imagemPath)) {
+                //return $imagemPath;
+                //}
                 //----------------------------------------------------------------------------
                 return false;
             }
