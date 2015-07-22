@@ -36,16 +36,15 @@ class LoginService extends AbstractService {
     }
 
     public function ldap($ldap_server, $auth_user, $auth_pass) {
-        if (!($connect = ldap_connect($ldap_server))) {
+        if (!($connect = @ldap_connect($ldap_server))) {
             return false;
         }
-        if (!($bind = ldap_bind($connect, $auth_user, $auth_pass))) {
+        if (!($bind = @ldap_bind($connect, $auth_user, $auth_pass))) {
             return false;
-        } else {
-            return true;
         }
+        return true;
     }
-    
+
     public function ConfigAD() {
         $serviceConfig = $this->app['ConfigService'];
         $config = $serviceConfig->findConfig('ActiveDirectory');
@@ -62,12 +61,12 @@ class LoginService extends AbstractService {
         $repo = $this->em->getRepository($this->entity);
         $config = $this->ConfigAD();
         if ($config) {
-            if (!$this->ldap($config->getParametro('servidor'), "{$username}@{$config->getParametro('dominio')}", $password)){
+            if (!$this->ldap($config->getParametro('servidor'), "{$username}@{$config->getParametro('dominio')}", $password)) {
                 return false;
             }
-            return $repo->findByUsername($username);
+            return $repo->findOneBy(['username' => $username]);
         }
-        return $repo->findByUsernameAndPassword($username, $password);
+        return $repo->findOneBy(['username' => $username, 'password' => $password]);
     }
 
     public static function uploadImage(array $files = array(), $username) {
