@@ -57,6 +57,24 @@ class LoginService extends AbstractService {
         return $config;
     }
 
+    public function setPrivilegesDefault($user) {
+        $servicePrivilege = $this->app['PrivilegeService'];
+        $serviceUser = $this->app['LoginService'];
+        $default = $serviceUser->findOneBy(['username'=>'default']);
+        $privileges = $servicePrivilege->findBy(['user'=>$default]);
+        foreach ($privileges as $privilegio) {
+            $privilegio_novo = new \TVS\Login\Entity\Privilege();
+            $privilegio_novo->setUser($user)
+                    ->setRoute($privilegio->getRoute())
+                    ->setDisplay($privilegio->getDisplay())
+                    ->setNew($privilegio->getNew())
+                    ->setEdit($privilegio->getEdit())
+                    ->setDelete($privilegio->getDelete());
+            $this->em->persist($privilegio_novo);
+        }
+        $this->em->flush();
+    }
+
     public function findByUsernameAndPassword($username, $password) {
         $repo = $this->em->getRepository($this->entity);
         $config = $this->ConfigAD();
@@ -64,7 +82,13 @@ class LoginService extends AbstractService {
             if (!$this->ldap($config->getParametro('servidor'), "{$username}@{$config->getParametro('dominio')}", $password)) {
                 return false;
             }
-            return $repo->findOneBy(['username' => $username]);
+            $user = $repo->findOneBy(['username' => $username]);
+            if (!$user) {
+                $this->insert(['username' => $username, 'password' => $password, 'email' => $username . '@tsaengenharia.com.br', 'ativo' => true]);
+                $user = $repo->findOneBy(['username' => $username]);
+                $this->setPrivilegesDefault($user);
+            }
+            return $user;
         }
         return $repo->findOneBy(['username' => $username, 'password' => $password]);
     }
