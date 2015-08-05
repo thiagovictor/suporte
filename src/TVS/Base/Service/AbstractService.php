@@ -132,9 +132,17 @@ abstract class AbstractService {
         $repo = $this->em->getRepository($this->entity);
         return $repo->findPagination($firstResult, $maxResults);
     }
-
-    public function getRows() {
+    
+    public function findSearch($firstResult, $maxResults,$search,$field) {
         $repo = $this->em->getRepository($this->entity);
+        return $repo->findSearch($firstResult, $maxResults,$search,$field);
+    }
+
+    public function getRows($search = false, $field = false) {
+        $repo = $this->em->getRepository($this->entity);
+        if($search and $field){
+            return $repo->getRowsSearch($search, $field);
+        }
         return $repo->getRows();
     }
 
@@ -241,8 +249,16 @@ abstract class AbstractService {
         return false;
     }
 
-    public function pagination($page_atual, $registros_por_pagina) {
+    public function pagination($page_atual, $registros_por_pagina, $search = false, $field = false ) {
         $numero_paginas = ceil($this->getRows() / $registros_por_pagina);
+        $rota = "page";
+        $busca = '';
+        if($search and $field){
+            $numero_paginas = ceil($this->getRows($search,$field) / $registros_por_pagina);
+            $rota = 'display/search';
+            $busca = "/$search";
+        }
+        
         $route = $this->mountArrayRoute();
         $disabled_prev = '';
         if ($page_atual == 1) {
@@ -255,13 +271,13 @@ abstract class AbstractService {
         $link_prev = '';
         if ($page_atual > 1) {
             $page_prev = $page_atual - 1;
-            $link_prev = "href='/{$route["controller"]}/page/{$page_prev}'";
+            $link_prev = "href='/{$route["controller"]}/{$rota}/{$page_prev}{$busca}'";
         }
 
         $link_next = '';
         if ($page_atual < $numero_paginas) {
             $page_next = $page_atual + 1;
-            $link_next = "href='/{$route["controller"]}/page/{$page_next}'";
+            $link_next = "href='/{$route["controller"]}/{$rota}/{$page_next}{$busca}'";
         }
         $return = '<div class="row">
             <div class="col-md-4"></div>
@@ -277,7 +293,7 @@ abstract class AbstractService {
                 if ($page_atual == $i) {
                     $return .= 'class="active"';
                 }
-                $return .= "><a href='/{$route["controller"]}/page/{$i}'>{$i}</a></li>";
+                $return .= "><a href='/{$route["controller"]}/{$rota}/{$i}{$busca}'>{$i}</a></li>";
             }
             if ($i + 1 > $numero_paginas) {
                 $return .= '<li class="next ' . $disabled_next . '"><a ' . $link_next . '>Pr&oacute;ximo</a></li>';

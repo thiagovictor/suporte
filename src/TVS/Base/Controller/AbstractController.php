@@ -19,6 +19,7 @@ class AbstractController implements ControllerProviderInterface {
     protected $controller;
     protected $titulo;
     protected $app;
+    protected $field_search;
 
     protected function connect_extra() {
         
@@ -40,6 +41,33 @@ class AbstractController implements ControllerProviderInterface {
                         'pagination' => $app[$this->service]->pagination(1, $this->registros_por_pagina)
             ]);
         })->bind($this->bind . '_listar');
+
+        //####LISTAGEM BUSCA#######
+        $this->controller->post('/display/search', function () use ($app) {
+            $result = $app[$this->service]->findSearch(0, $this->registros_por_pagina,$app['request']->get('search'),  $this->field_search);
+            return $app['twig']->render($this->view_list, [
+                        $this->param_view => $result,
+                        'page_atual' => 1,
+                        'titulo' => $this->titulo,
+                        'search' => $app['request']->get('search'),
+                        'pagination' => $app[$this->service]->pagination(1, $this->registros_por_pagina,$app['request']->get('search'),  $this->field_search)
+            ]);
+        })->bind($this->bind . '_search');
+        
+         //####LISTAGEM BUSCA#######
+        $this->controller->get('/display/search/{page}/{search}', function ($page,$search) use ($app) {
+            if ($page < 1 or $page > ceil($app[$this->service]->getRows($search,$this->field_search) / $this->registros_por_pagina)) {
+                $page = 1;
+            }
+            $result = $app[$this->service]->findSearch((($page - 1) * $this->registros_por_pagina), $this->registros_por_pagina,$search,  $this->field_search);
+            return $app['twig']->render($this->view_list, [
+                        $this->param_view => $result,
+                        'page_atual' => 1,
+                        'titulo' => $this->titulo,
+                        'search' => $search,
+                        'pagination' => $app[$this->service]->pagination($page, $this->registros_por_pagina,$search,  $this->field_search)
+            ]);
+        })->bind($this->bind . '_listar_pagination_search');
 
 
         //####LISTAGEM PAGINADA#######
@@ -84,11 +112,11 @@ class AbstractController implements ControllerProviderInterface {
         $this->controller->match('/edit/{id}', function ($id) use ($app) {
             $serviceManager = $app[$this->service];
             $form = $app[$this->form];
-            
+
             if ($this->form_edit) {
                 $form = $app[$this->form_edit];
             }
-            
+
             $form->handleRequest($app['request']);
             if ($form->isValid()) {
                 $data = $form->getData();

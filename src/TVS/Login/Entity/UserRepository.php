@@ -5,6 +5,7 @@ namespace TVS\Login\Entity;
 use Doctrine\ORM\EntityRepository;
 
 class UserRepository extends EntityRepository {
+
     public function fatchPairs() {
         $entities = $this->findAll();
         $array = array();
@@ -13,6 +14,7 @@ class UserRepository extends EntityRepository {
         }
         return $array;
     }
+
     public function findByEmailAndPassword($email, $password) {
         $user = $this->findOneByEmail($email);
 
@@ -26,7 +28,7 @@ class UserRepository extends EntityRepository {
             return false;
         }
     }
-    
+
     public function findByUsernameAndPassword($username, $password) {
         $user = $this->findOneByUsername($username);
 
@@ -40,7 +42,7 @@ class UserRepository extends EntityRepository {
             return false;
         }
     }
-    
+
     public function findById($id) {
         $user = $this->findOneById($id);
         if ($user) {
@@ -48,21 +50,39 @@ class UserRepository extends EntityRepository {
         }
         return false;
     }
-    
-    public function findPagination($firstResult,$maxResults) {
+
+    public function findPagination($firstResult, $maxResults) {
         return $this->createQueryBuilder('c')
-                ->setFirstResult($firstResult)
-                ->setMaxResults($maxResults)
-                ->getQuery()
-                ->getResult();
+                        ->setFirstResult($firstResult)
+                        ->setMaxResults($maxResults)
+                        ->getQuery()
+                        ->getResult();
     }
-    
+
     public function getRows() {
         return $this->createQueryBuilder('c')
-                ->select('Count(c)')
-                ->getQuery()
-                ->getSingleScalarResult();
+                        ->select('Count(c)')
+                        ->getQuery()
+                        ->getSingleScalarResult();
     }
-    
+
+    public function findSearch($firstResult, $maxResults, $search, $field) {
+        $query = $this->createQueryBuilder('c')
+                ->where("c.{$field} like :search")
+                ->setParameter('search', "%{$search}%")
+                ->setFirstResult($firstResult)
+                ->setMaxResults($maxResults)
+                ->getQuery();
+        return $query->getResult();
+    }
+
+    public function getRowsSearch($search, $field) {
+        $query = $this->createQueryBuilder('c')
+                ->select('Count(c)')
+                ->where("c.{$field} like :search")
+                ->setParameter('search', "%{$search}%")
+                ->getQuery();
+        return $query->getSingleScalarResult();
+    }
 
 }

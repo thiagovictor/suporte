@@ -16,5 +16,6 @@ class ConfigController extends AbstractController {
         $this->view_edit = 'login/default/default_edit.twig';
         $this->view_list = 'login/config/config.html.twig';
         $this->titulo = "Par&acirc;metros de sistema";
+        $this->field_search = "nome";
     }
 }

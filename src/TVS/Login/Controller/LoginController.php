@@ -18,6 +18,7 @@ class LoginController extends AbstractController {
         $this->form = 'UserForm';
         $this->form_edit = 'UserFormEdit';
         $this->titulo = "Usu&aacute;rios";
+        $this->field_search = "username";
     }
 
     public function connect_extra() {

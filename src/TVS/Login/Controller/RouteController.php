@@ -16,6 +16,7 @@ class RouteController extends AbstractController {
         $this->view_edit = 'login/default/default_edit.twig';
         $this->view_list = 'login/route/route.twig';
         $this->titulo = "M&oacute;dulos";
+        $this->field_search = "route";
         
     }
 

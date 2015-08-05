@@ -28,7 +28,7 @@ class MenuRepository extends EntityRepository {
         }
         return false;
     }
-    
+
     public function fatchPairs() {
         $entities = $this->findAll();
         $array = array();
@@ -36,6 +36,25 @@ class MenuRepository extends EntityRepository {
             $array[$entity->getId()] = $entity->getLabel();
         }
         return $array;
+    }
+
+    public function findSearch($firstResult, $maxResults, $search, $field) {
+        $query = $this->createQueryBuilder('c')
+                ->where("c.{$field} like :search")
+                ->setParameter('search', "%{$search}%")
+                ->setFirstResult($firstResult)
+                ->setMaxResults($maxResults)
+                ->getQuery();
+        return $query->getResult();
+    }
+
+    public function getRowsSearch($search, $field) {
+        $query = $this->createQueryBuilder('c')
+                ->select('Count(c)')
+                ->where("c.{$field} like :search")
+                ->setParameter('search', "%{$search}%")
+                ->getQuery();
+        return $query->getSingleScalarResult();
     }
 
 }
