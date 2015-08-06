@@ -14,10 +14,28 @@ class PrivilegeController extends AbstractController {
         $this->param_view = 'result';
         $this->view_new = 'login/default/default_new.twig';
         $this->view_edit = 'login/default/default_edit.twig';
-        $this->view_list = 'login/privilege/privilege.twig';
+        $this->view_list = 'login/default/default_list.html.twig';
         $this->form = 'PrivilegeForm';
         $this->titulo = "Privil&eacute;gios";
         $this->field_search = "route";
+        $this->fields_table = [
+            'ID',
+            'Rota',
+            'Visualizar',
+            'Novo',
+            'Editar',
+            'deletar',
+            'Usu&aacute;rio'
+        ];
+        $this->object_key_table = [
+            ['id'],
+            ['route','route'],
+            ['display'],
+            ['new'],
+            ['edit'],
+            ['delete'],
+            ['user','username']
+        ];
     }
 
     public function connect_extra() {

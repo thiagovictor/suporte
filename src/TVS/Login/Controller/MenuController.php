@@ -14,9 +14,19 @@ class MenuController extends AbstractController {
         $this->param_view = 'result';
         $this->view_new = 'login/default/default_new.twig';
         $this->view_edit = 'login/default/default_edit.twig';
-        $this->view_list = 'login/menu/menu.html.twig';
+        $this->view_list = 'login/default/default_list.html.twig';
         $this->titulo = "Menu";
         $this->field_search = "desc";
+        $this->fields_table = [
+            'ID',
+            'MENU',
+            'DESCRI&Ccedil;&Atilde;O',
+        ];
+        $this->object_key_table = [
+            ['id'],
+            ['label'],
+            ['desc'],
+        ];
     }
 
     public function connect_extra() {

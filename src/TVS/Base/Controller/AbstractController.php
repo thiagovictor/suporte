@@ -20,6 +20,9 @@ class AbstractController implements ControllerProviderInterface {
     protected $titulo;
     protected $app;
     protected $field_search;
+    protected $path_table_aditional = [];
+    protected $fields_table = [];
+    protected $object_key_table = [];
 
     protected function connect_extra() {
         
@@ -36,6 +39,10 @@ class AbstractController implements ControllerProviderInterface {
             $result = $app[$this->service]->findPagination(0, $this->registros_por_pagina);
             return $app['twig']->render($this->view_list, [
                         $this->param_view => $result,
+                        'bind_path' => $this->bind,
+                        'path_table_aditional' => $this->path_table_aditional,
+                        'fields_table' => $this->fields_table,
+                        'object_key_table' => $this->object_key_table,
                         'page_atual' => 1,
                         'titulo' => $this->titulo,
                         'pagination' => $app[$this->service]->pagination(1, $this->registros_por_pagina)
@@ -44,28 +51,36 @@ class AbstractController implements ControllerProviderInterface {
 
         //####LISTAGEM BUSCA#######
         $this->controller->post('/display/search', function () use ($app) {
-            $result = $app[$this->service]->findSearch(0, $this->registros_por_pagina,$app['request']->get('search'),  $this->field_search);
+            $result = $app[$this->service]->findSearch(0, $this->registros_por_pagina, $app['request']->get('search'), $this->field_search);
             return $app['twig']->render($this->view_list, [
                         $this->param_view => $result,
+                        'bind_path' => $this->bind,
+                        'path_table_aditional' => $this->path_table_aditional,
+                        'fields_table' => $this->fields_table,
+                        'object_key_table' => $this->object_key_table,
                         'page_atual' => 1,
                         'titulo' => $this->titulo,
                         'search' => $app['request']->get('search'),
-                        'pagination' => $app[$this->service]->pagination(1, $this->registros_por_pagina,$app['request']->get('search'),  $this->field_search)
+                        'pagination' => $app[$this->service]->pagination(1, $this->registros_por_pagina, $app['request']->get('search'), $this->field_search)
             ]);
         })->bind($this->bind . '_search');
-        
-         //####LISTAGEM BUSCA#######
-        $this->controller->get('/display/search/{page}/{search}', function ($page,$search) use ($app) {
-            if ($page < 1 or $page > ceil($app[$this->service]->getRows($search,$this->field_search) / $this->registros_por_pagina)) {
+
+        //####LISTAGEM BUSCA#######
+        $this->controller->get('/display/search/{page}/{search}', function ($page, $search) use ($app) {
+            if ($page < 1 or $page > ceil($app[$this->service]->getRows($search, $this->field_search) / $this->registros_por_pagina)) {
                 $page = 1;
             }
-            $result = $app[$this->service]->findSearch((($page - 1) * $this->registros_por_pagina), $this->registros_por_pagina,$search,  $this->field_search);
+            $result = $app[$this->service]->findSearch((($page - 1) * $this->registros_por_pagina), $this->registros_por_pagina, $search, $this->field_search);
             return $app['twig']->render($this->view_list, [
                         $this->param_view => $result,
+                        'bind_path' => $this->bind,
+                        'path_table_aditional' => $this->path_table_aditional,
+                        'fields_table' => $this->fields_table,
+                        'object_key_table' => $this->object_key_table,
                         'page_atual' => 1,
                         'titulo' => $this->titulo,
                         'search' => $search,
-                        'pagination' => $app[$this->service]->pagination($page, $this->registros_por_pagina,$search,  $this->field_search)
+                        'pagination' => $app[$this->service]->pagination($page, $this->registros_por_pagina, $search, $this->field_search)
             ]);
         })->bind($this->bind . '_listar_pagination_search');
 
@@ -78,6 +93,10 @@ class AbstractController implements ControllerProviderInterface {
             $result = $app[$this->service]->findPagination((($page - 1) * $this->registros_por_pagina), $this->registros_por_pagina);
             return $app['twig']->render($this->view_list, [
                         $this->param_view => $result,
+                        'bind_path' => $this->bind,
+                        'path_table_aditional' => $this->path_table_aditional,
+                        'fields_table' => $this->fields_table,
+                        'object_key_table' => $this->object_key_table,
                         'page_atual' => $page,
                         'titulo' => $this->titulo,
                         'pagination' => $app[$this->service]->pagination($page, $this->registros_por_pagina)

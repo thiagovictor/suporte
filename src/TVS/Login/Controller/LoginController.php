@@ -14,11 +14,24 @@ class LoginController extends AbstractController {
         $this->param_view = 'result';
         $this->view_new = 'login/default/default_new.twig';
         $this->view_edit = 'login/default/default_edit.twig';
-        $this->view_list = 'login/user/user.twig';
+        $this->view_list = 'login/default/default_list.html.twig';
         $this->form = 'UserForm';
         $this->form_edit = 'UserFormEdit';
         $this->titulo = "Usu&aacute;rios";
         $this->field_search = "username";
+        $this->fields_table = [
+            'ID',
+            'NOME',
+            'EMAIL',
+            'ATIVO',
+        ];
+        $this->object_key_table = [
+            ['id'],
+            ['username'],
+            ['email'],
+            ['ativo'],
+        ];
+        $this->path_table_aditional = ['editPrivilegeAllUser'=>'glyphicon glyphicon-lock'];
     }
 
     public function connect_extra() {
