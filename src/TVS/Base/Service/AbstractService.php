@@ -279,9 +279,7 @@ abstract class AbstractService {
             $page_next = $page_atual + 1;
             $link_next = "href='/{$route["controller"]}/{$rota}/{$page_next}{$busca}'";
         }
-        $return = '<div class="row">
-            <div class="col-md-4"></div>
-            <div class="col-md-4">
+        $return = '<div align="center" >
                 <nav>
                     <ul class="pagination">';
         for ($i = 1; $i <= $numero_paginas; $i++) {
@@ -301,8 +299,7 @@ abstract class AbstractService {
         }
         $return .= '</ul>
                 </nav>
-            </div>
-            <div class="col-md-4"></div>
+
         </div>';
 
         return $return;

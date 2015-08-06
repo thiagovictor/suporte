@@ -9,21 +9,28 @@
             </div>
         {% endfor%}
     {% endif %}
-    <div class="col-lg-8">
-        <a type="button" href="{{path(bind_path~'_new')}}" class="{{class_btn}}" role="button">
-            <span class="{{class_btn_new}}" aria-hidden="true"></span> Novo
-        </a>
-    </div>
-    <form action="{{path(bind_path~'_search')}}" method="POST">
-        <div class="col-lg-4">
-            <div class="input-group">
-                <input type="text" name="search" class="form-control" placeholder="Procurar por...">
-                <span class="input-group-btn">
-                    <button class="btn btn-default" type="submit"><span class="{{ class_btn_search }}" aria-hidden="true"></span></button>
-                </span>
-            </div>
-        </div>
-    </form>
+    <table width="100%">
+        <thead>
+        <tr>
+            <th width="70%">
+                <a type="button" href="{{path(bind_path~'_new')}}" class="{{class_btn}}" role="button">
+                    <span class="{{class_btn_new}}" aria-hidden="true"></span> Novo
+                </a>
+            </th>
+            <th align="left">
+            <form action="{{path(bind_path~'_search')}}" method="POST">
+                <div class="input-group">
+                    <input type="text" name="search" class="form-control" placeholder="Procurar por...">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit"><span class="{{ class_btn_search }}" aria-hidden="true"></span></button>
+                    </span>
+                </div>
+            </form>
+            </th>
+        </tr>
+        </thead>
+    </table>
+                   
 {% endblock %}
 
 {% block conteudo %}
