@@ -204,7 +204,15 @@ abstract class AbstractService {
         $PrivilegeRepositoty = $this->em->getRepository('TVS\Login\Entity\Privilege');
         $objectPrivilege = $PrivilegeRepositoty->findOneBy(array('user' => $user, 'route' => $objectRoute));
         if ($objectToArray) {
-            return $objectPrivilege->toArray();
+            if($objectPrivilege){
+                return $objectPrivilege->toArray();
+            }
+            $objectRouteGeneric = $routeRepository->findOneByRoute('*');
+            $objectPrivilegeGeneric = $PrivilegeRepositoty->findOneBy(array('user' => $user, 'route' => $objectRouteGeneric));
+            if($objectPrivilegeGeneric){
+                return $objectPrivilegeGeneric->toArray();
+            }
+            return ['new'=>false,'edit'=>false,'delete'=>false];
         }
         $getAction = 'get' . ucfirst($route['action']);
         if ($objectPrivilege) {

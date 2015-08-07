@@ -39,6 +39,7 @@ class AbstractController implements ControllerProviderInterface {
             $result = $app[$this->service]->findPagination(0, $this->registros_por_pagina);
             return $app['twig']->render($this->view_list, [
                         $this->param_view => $result,
+                        'isAllowed' => $app[$this->service]->isAllowed(true),
                         'bind_path' => $this->bind,
                         'path_table_aditional' => $this->path_table_aditional,
                         'fields_table' => $this->fields_table,
@@ -54,6 +55,7 @@ class AbstractController implements ControllerProviderInterface {
             $result = $app[$this->service]->findSearch(0, $this->registros_por_pagina, $app['request']->get('search'), $this->field_search);
             return $app['twig']->render($this->view_list, [
                         $this->param_view => $result,
+                        'isAllowed' => $app[$this->service]->isAllowed(true),
                         'bind_path' => $this->bind,
                         'path_table_aditional' => $this->path_table_aditional,
                         'fields_table' => $this->fields_table,
@@ -73,6 +75,7 @@ class AbstractController implements ControllerProviderInterface {
             $result = $app[$this->service]->findSearch((($page - 1) * $this->registros_por_pagina), $this->registros_por_pagina, $search, $this->field_search);
             return $app['twig']->render($this->view_list, [
                         $this->param_view => $result,
+                        'isAllowed' => $app[$this->service]->isAllowed(true),
                         'bind_path' => $this->bind,
                         'path_table_aditional' => $this->path_table_aditional,
                         'fields_table' => $this->fields_table,
@@ -93,6 +96,7 @@ class AbstractController implements ControllerProviderInterface {
             $result = $app[$this->service]->findPagination((($page - 1) * $this->registros_por_pagina), $this->registros_por_pagina);
             return $app['twig']->render($this->view_list, [
                         $this->param_view => $result,
+                        'isAllowed' => $app[$this->service]->isAllowed(true),
                         'bind_path' => $this->bind,
                         'path_table_aditional' => $this->path_table_aditional,
                         'fields_table' => $this->fields_table,

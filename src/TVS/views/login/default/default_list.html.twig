@@ -13,9 +13,11 @@
         <thead>
         <tr>
             <th width="70%">
+                {% if isAllowed.new %}
                 <a type="button" href="{{path(bind_path~'_new')}}" class="{{class_btn}}" role="button">
                     <span class="{{class_btn_new}}" aria-hidden="true"></span> Novo
                 </a>
+                {% endif %}
             </th>
             <th align="left">
             <form action="{{path(bind_path~'_search')}}" method="POST">
@@ -64,12 +66,16 @@
                         <td>{{ attr }}</td> 
                     {% endfor %}
                     <td>
+                        {% if isAllowed.edit %}
                         <a href="{{path( bind_path~'_edit',{'id':object.id})}}" class="{{class_btn}}" aria-label="Left Align">
                             <span class="{{class_btn_edit}}" aria-hidden="true"></span>
                         </a>
+                        {% endif %}
+                        {% if isAllowed.delete %}
                         <a href="{{path( bind_path~'_delete',{'id':object.id})}}" class="{{class_btn}}" aria-label="Left Align">
                             <span class="{{class_btn_delete}}" aria-hidden="true"></span>
                         </a>
+                        {% endif %}
                         {% for key, class in path_table_aditional %}
                             <a href="{{path(key,{'id':object.id})}}" class="{{class_btn}}" aria-label="Left Align">
                                 <span class="{{ class }}" aria-hidden="true"></span>
