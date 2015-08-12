@@ -3,7 +3,6 @@
 namespace TVS\Login\Controller;
 
 use TVS\Base\Controller\AbstractController;
-use TVS\Login\Entity\Privilege;
 
 class PrivilegeController extends AbstractController {
 
@@ -30,10 +29,10 @@ class PrivilegeController extends AbstractController {
         $this->object_key_table = [
             ['id'],
             ['route','route'],
-            ['display'],
-            ['new'],
-            ['edit'],
-            ['delete'],
+            ['bool','display'],
+            ['bool','new'],
+            ['bool','edit'],
+            ['bool','delete'],
             ['user','username']
         ];
     }

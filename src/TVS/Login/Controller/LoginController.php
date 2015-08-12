@@ -30,8 +30,8 @@ class LoginController extends AbstractController {
             ['id'],
             ['username'],
             ['email'],
-            ['ativo'],
-            ['ad']
+            ['bool','ativo'],
+            ['bool','ad']
         ];
         $this->path_table_aditional = ['editPrivilegeAllUser'=>'glyphicon glyphicon-lock'];
     }
