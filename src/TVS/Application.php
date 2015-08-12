@@ -66,6 +66,10 @@ class Application extends ApplicationSilex {
         $app['ConfigForm'] = function () use($app) {
             return $app['form.factory']->createBuilder(new Login\Form\ConfigType())->getForm();
         };
+        
+        $app['LDAP'] = function () use($app){
+            return new \TVS\Base\Lib\ConnectionLDAP($app);
+        };
 
         $app->before(function(Request $request) use ($app) {
             if (!$request->get('non_require_authentication')) {

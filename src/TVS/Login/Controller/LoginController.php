@@ -24,12 +24,14 @@ class LoginController extends AbstractController {
             'NOME',
             'EMAIL',
             'ATIVO',
+            'SYNC'
         ];
         $this->object_key_table = [
             ['id'],
             ['username'],
             ['email'],
             ['ativo'],
+            ['ad']
         ];
         $this->path_table_aditional = ['editPrivilegeAllUser'=>'glyphicon glyphicon-lock'];
     }

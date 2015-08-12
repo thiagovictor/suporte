@@ -24,7 +24,7 @@ class User {
     /**
      * @var string
      *
-     * @ORM\Column(name="username", type="string", length=16, nullable=false)
+     * @ORM\Column(name="username", type="string", length=255, nullable=false)
      */
     protected $username;
 
@@ -60,6 +60,13 @@ class User {
      * @ORM\Column(name="ativo", type="boolean", nullable=false)
      */
     protected $ativo;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="is_ad", type="boolean", nullable=true)
+     */
+    protected $ad;
 
     /**
      * @ORM\PrePersist
@@ -154,7 +161,16 @@ class User {
         $this->salt = $salt;
         return $this;
     }
+    
+    function getAd() {
+        return $this->ad;
+    }
 
+    function setAd($ad) {
+        $this->ad = $ad;
+        return $this;
+    }
+    
     public function __toString() {
         return $this->username;
     }
@@ -166,7 +182,8 @@ class User {
             'password' => $this->getPassword(),
             'salt' => $this->getSalt(),
             'email' => $this->getEmail(),
-            'ativo' => $this->getAtivo()
+            'ativo' => $this->getAtivo(),
+            'ad' => $this->getAd()
         ];
     }
 

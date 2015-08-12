@@ -149,6 +149,11 @@ class AbstractController implements ControllerProviderInterface {
                 $result = $app[$this->service]->findPagination(0, $this->registros_por_pagina);
                 return $app['twig']->render($this->view_list, [
                             $this->param_view => $result,
+                            'isAllowed' => $app[$this->service]->isAllowed(true),
+                            'bind_path' => $this->bind,
+                            'path_table_aditional' => $this->path_table_aditional,
+                            'fields_table' => $this->fields_table,
+                            'object_key_table' => $this->object_key_table,
                             'page_atual' => 1,
                             'Message' => $serviceManager->getMessage(),
                             'titulo' => $this->titulo,
@@ -173,6 +178,11 @@ class AbstractController implements ControllerProviderInterface {
             $result = $app[$this->service]->findPagination(0, $this->registros_por_pagina);
             return $app['twig']->render($this->view_list, [
                         $this->param_view => $result,
+                        'isAllowed' => $app[$this->service]->isAllowed(true),
+                        'bind_path' => $this->bind,
+                        'path_table_aditional' => $this->path_table_aditional,
+                        'fields_table' => $this->fields_table,
+                        'object_key_table' => $this->object_key_table,
                         'page_atual' => 1,
                         'Message' => $serviceManager->getMessage(),
                         'titulo' => $this->titulo,

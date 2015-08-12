@@ -35,33 +35,11 @@ class LoginService extends AbstractService {
         return $data;
     }
 
-    public function ldap($ldap_server, $auth_user, $auth_pass) {
-        if (!($connect = @ldap_connect($ldap_server))) {
-            return false;
-        }
-        if (!($bind = @ldap_bind($connect, $auth_user, $auth_pass))) {
-            return false;
-        }
-        return true;
-    }
-
-    public function ConfigAD() {
-        $serviceConfig = $this->app['ConfigService'];
-        $config = $serviceConfig->findConfig('ActiveDirectory');
-        if (!$config) {
-            return false;
-        }
-        if (!$config->getParametro('ativo')) {
-            return false;
-        }
-        return $config;
-    }
-
     public function setPrivilegesDefault($user) {
         $servicePrivilege = $this->app['PrivilegeService'];
         $serviceUser = $this->app['LoginService'];
-        $default = $serviceUser->findOneBy(['username'=>'default']);
-        $privileges = $servicePrivilege->findBy(['user'=>$default]);
+        $default = $serviceUser->findOneBy(['username' => 'default']);
+        $privileges = $servicePrivilege->findBy(['user' => $default]);
         foreach ($privileges as $privilegio) {
             $privilegio_novo = new \TVS\Login\Entity\Privilege();
             $privilegio_novo->setUser($user)
@@ -77,20 +55,31 @@ class LoginService extends AbstractService {
 
     public function findByUsernameAndPassword($username, $password) {
         $repo = $this->em->getRepository($this->entity);
-        $config = $this->ConfigAD();
-        if ($config) {
-            if (!$this->ldap($config->getParametro('servidor'), "{$username}@{$config->getParametro('dominio')}", $password)) {
+        $ldap = $this->app['LDAP'];
+        if (!$ldap->start()) {
+            return $repo->findByUsernameAndPassword($username,$password);
+        }
+        if (!$ldap->checkLogin($username)) {
+            $user = $repo->findByUsernameAndPassword($username,$password);
+            if(!$user){
                 return false;
             }
-            $user = $repo->findOneBy(['username' => $username]);
-            if (!$user) {
-                $this->insert(['username' => $username, 'password' => $password, 'email' => $username . '@tsaengenharia.com.br', 'ativo' => true]);
-                $user = $repo->findOneBy(['username' => $username]);
-                $this->setPrivilegesDefault($user);
+            if($user->getAD()){
+                return false;
             }
             return $user;
         }
-        return $repo->findOneBy(['username' => $username, 'password' => $password]);
+        if (!$ldap->checkLoginAndPassword($username, $password)) {
+            return false;
+        }
+
+        $user = $repo->findOneBy(['username' => $username]);
+        if (!$user) {
+            $this->insert(['username' => $username, 'password' => $password, 'email' => $username . '@tsaengenharia.com.br', 'ativo' => true, 'ad'=> true]);
+            $user = $repo->findOneBy(['username' => $username]);
+            $this->setPrivilegesDefault($user);
+        }
+        return $user;
     }
 
     public static function uploadImage(array $files = array(), $username) {

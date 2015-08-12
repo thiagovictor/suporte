@@ -33,6 +33,9 @@ class UserRepository extends EntityRepository {
         $user = $this->findOneByUsername($username);
 
         if ($user) {
+            if(!$user->getAtivo()){
+                return false;
+            }
             if ($user->getPassword() == $user->encryptedPassword($password)) {
                 return $user;
             } else {
